@@ -1,0 +1,658 @@
+{
+  "restaurant": {
+    "name": "Food Point",
+    "tagline": "Authentic Tanzanian kitchen · Morogoro, Dar es Salaam",
+    "currency": "TSh",
+    "tables": 24
+  },
+  "kisinia": {
+    "enabled": true,
+    "title": "Kisinia Platter",
+    "blurb": "One big shared plate - chips, wali, nyama, matunda and more. Pick your size, load it up.",
+    "sizes": [
+      {
+        "id": "watu2",
+        "name": "Watu 2",
+        "people": 2,
+        "price": 50000,
+        "slots": 5
+      },
+      {
+        "id": "watu4",
+        "name": "Watu 4",
+        "people": 4,
+        "price": 100000,
+        "slots": 8
+      },
+      {
+        "id": "watu6",
+        "name": "Watu 6",
+        "people": 6,
+        "price": 150000,
+        "slots": 12
+      }
+    ],
+    "components": [
+      {
+        "id": "wali",
+        "name": "Wali",
+        "price": 4000,
+        "icon": "Wheat",
+        "available": true
+      },
+      {
+        "id": "chips",
+        "name": "Chips",
+        "price": 5000,
+        "icon": "Utensils",
+        "available": true
+      },
+      {
+        "id": "kuku",
+        "name": "Kuku (Chicken)",
+        "price": 15000,
+        "icon": "Drumstick",
+        "available": true
+      },
+      {
+        "id": "mbuzi",
+        "name": "Nyama ya Mbuzi",
+        "price": 15000,
+        "icon": "Beef",
+        "available": true
+      },
+      {
+        "id": "samaki",
+        "name": "Samaki",
+        "price": 14000,
+        "icon": "Fish",
+        "available": true
+      },
+      {
+        "id": "kachumbari",
+        "name": "Kachumbari",
+        "price": 2000,
+        "icon": "Salad",
+        "available": true
+      },
+      {
+        "id": "matunda",
+        "name": "Matunda",
+        "price": 5000,
+        "icon": "Leaf",
+        "available": true
+      },
+      {
+        "id": "ndizi",
+        "name": "Ndizi",
+        "price": 4000,
+        "icon": "Wheat",
+        "available": true
+      },
+      {
+        "id": "maharage",
+        "name": "Maharage",
+        "price": 3000,
+        "icon": "Soup",
+        "available": true
+      },
+      {
+        "id": "viazi",
+        "name": "Viazi vya Karanga",
+        "price": 3000,
+        "icon": "Egg",
+        "available": true
+      },
+      {
+        "id": "sambusa",
+        "name": "Sambusa (4 pcs)",
+        "price": 3000,
+        "icon": "Croissant",
+        "available": true
+      },
+      {
+        "id": "ugali",
+        "name": "Ugali",
+        "price": 2000,
+        "icon": "UtensilsCrossed",
+        "available": true
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "staples",
+      "name": "Wali & Ugali",
+      "icon": "Wheat"
+    },
+    {
+      "id": "grill",
+      "name": "Nyama Choma",
+      "icon": "Flame"
+    },
+    {
+      "id": "street",
+      "name": "Street Food",
+      "icon": "UtensilsCrossed"
+    },
+    {
+      "id": "sides",
+      "name": "Sides & Salads",
+      "icon": "Salad"
+    },
+    {
+      "id": "desserts",
+      "name": "Vitumbua & More",
+      "icon": "Cake"
+    },
+    {
+      "id": "drinks",
+      "name": "Vinywaji",
+      "icon": "Coffee"
+    }
+  ],
+  "items": [
+    {
+      "id": "st-01",
+      "name": "Nyama ya Ng'ombe na salad",
+      "description": "best combo of nyama choma and salad it comes with chips kavu",
+      "price": 18000,
+      "icon": "Beef",
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=640&q=75&auto=format&fit=crop",
+      "category": "grill",
+      "tags": [
+        "Signature",
+        "Swahili"
+      ],
+      "rating": 4.8,
+      "prepMinutes": 18,
+      "gradient": "from-sky-400 to-blue-600",
+      "available": true
+    },
+    {
+      "id": "st-02",
+      "name": "Tambi ya Nyama",
+      "description": "Fragrant spiced pilau rice slow-cooked with tender beef and pilau masala.",
+      "price": 3000,
+      "icon": "Utensils",
+      "image": "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=640&q=75&auto=format&fit=crop",
+      "category": "staples",
+      "tags": [
+        "Popular",
+        "Spicy"
+      ],
+      "rating": 4.7,
+      "prepMinutes": 20,
+      "gradient": "from-amber-400 to-orange-600",
+      "available": true
+    },
+    {
+      "id": "st-03",
+      "name": "chips na kuku",
+      "description": "Creamy chicken curry served with steamed basmati rice and kachumbari.",
+      "price": 11000,
+      "icon": "Drumstick",
+      "image": "https://images.unsplash.com/photo-1626074353765-517a681e40be?w=640&q=75&auto=format&fit=crop",
+      "category": "grill",
+      "tags": [
+        "Popular"
+      ],
+      "rating": 4.6,
+      "prepMinutes": 16,
+      "gradient": "from-orange-400 to-rose-600",
+      "available": true
+    },
+    {
+      "id": "st-04",
+      "name": "Ugali na Mchuzi wa Maharage",
+      "description": "Soft maize porridge with slow-simmered beans in coconut gravy.",
+      "price": 2000,
+      "icon": "Wheat",
+      "image": "/uploads/dish-1792496076582-7d2c6800.jpg",
+      "category": "staples",
+      "tags": [
+        "Budget",
+        "Vegan"
+      ],
+      "rating": 4.5,
+      "prepMinutes": 10,
+      "gradient": "from-amber-300 to-yellow-600",
+      "available": true
+    },
+    {
+      "id": "st-05",
+      "name": "Fruity salaad",
+      "description": "parachichi ,watermeloon ,embe and kachumbari",
+      "price": 7000,
+      "icon": "Leaf",
+      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=640&q=75&auto=format&fit=crop",
+      "category": "sides",
+      "tags": [
+        "Vegan"
+      ],
+      "rating": 4.4,
+      "prepMinutes": 12,
+      "gradient": "from-emerald-400 to-teal-600",
+      "available": true
+    },
+    {
+      "id": "st-06",
+      "name": "salaad and eggs",
+      "description": "Coconut bean stew with maize, a coastal comfort classic.",
+      "price": 7500,
+      "icon": "Soup",
+      "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=640&q=75&auto=format&fit=crop",
+      "category": "sides",
+      "tags": [
+        "Coastal"
+      ],
+      "rating": 4.5,
+      "prepMinutes": 15,
+      "gradient": "from-lime-400 to-emerald-700",
+      "available": true
+    },
+    {
+      "id": "gr-01",
+      "name": "Nyama Choma ya Mbuzi",
+      "description": "Charcoal-grilled goat meat with kachumbari, na chuma ya pili pili.",
+      "price": 18000,
+      "icon": "Beef",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=640&q=75&auto=format&fit=crop",
+      "category": "grill",
+      "tags": [
+        "Signature",
+        "Grill"
+      ],
+      "rating": 4.9,
+      "prepMinutes": 25,
+      "gradient": "from-rose-400 to-red-600",
+      "available": true
+    },
+    {
+      "id": "gr-02",
+      "name": "Mishkaki ya Nyama",
+      "description": "Marinated beef skewers grilled over open coals. Served with chips or ugali.",
+      "price": 13000,
+      "icon": "Flame",
+      "image": "https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=640&q=75&auto=format&fit=crop",
+      "category": "grill",
+      "tags": [
+        "Popular",
+        "Grill"
+      ],
+      "rating": 4.8,
+      "prepMinutes": 18,
+      "gradient": "from-orange-400 to-red-600",
+      "available": true
+    },
+    {
+      "id": "gr-03",
+      "name": "kuku mzima",
+      "description": "whole chicken charcoal-grilled with African spices, rice and kachumbari.",
+      "price": 15000,
+      "icon": "Drumstick",
+      "image": "/uploads/dish-1792496603363-cea28b71.jpg",
+      "category": "grill",
+      "tags": [
+        "Grill"
+      ],
+      "rating": 4.7,
+      "prepMinutes": 22,
+      "gradient": "from-amber-400 to-orange-700",
+      "available": true
+    },
+    {
+      "id": "gr-04",
+      "name": "Samaki wa Kuchoma",
+      "description": "Grilled tilapia stuffed with herbs, lemon and peri-peri butter.",
+      "price": 16000,
+      "icon": "Fish",
+      "image": "/uploads/dish-1792496670860-ffef21f6.jpg",
+      "category": "grill",
+      "tags": [
+        "Coastal",
+        "Grill"
+      ],
+      "rating": 4.6,
+      "prepMinutes": 24,
+      "gradient": "from-sky-400 to-cyan-700",
+      "available": true
+    },
+    {
+      "id": "stf-01",
+      "name": "Humberger",
+      "description": "Crispy fries folded into a golden egg omelette. A Dar street legend.",
+      "price": 4000,
+      "icon": "UtensilsCrossed",
+      "image": "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=640&q=75&auto=format&fit=crop",
+      "category": "street",
+      "tags": [
+        "Street",
+        "Popular"
+      ],
+      "rating": 4.7,
+      "prepMinutes": 10,
+      "gradient": "from-yellow-400 to-amber-600",
+      "available": true
+    },
+    {
+      "id": "stf-02",
+      "name": "Sambusa ya Nyama (4 pcs)",
+      "description": "Golden pastry parcels spiced with beef, onion and cumin. Fried to order.",
+      "price": 3000,
+      "icon": "Utensils",
+      "image": "https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=640&q=75&auto=format&fit=crop",
+      "category": "street",
+      "tags": [
+        "Snack"
+      ],
+      "rating": 4.5,
+      "prepMinutes": 8,
+      "gradient": "from-amber-300 to-orange-500",
+      "available": true
+    },
+    {
+      "id": "stf-03",
+      "name": "Muhogo wa Kupaka",
+      "description": "Boiled cassava tossed in a smoky coconut-peanut sauce.",
+      "price": 3500,
+      "icon": "Leaf",
+      "image": "/uploads/dish-1792495909514-3edd0156.jpg",
+      "category": "street",
+      "tags": [
+        "Vegan",
+        "Coastal"
+      ],
+      "rating": 4.4,
+      "prepMinutes": 12,
+      "gradient": "from-lime-400 to-emerald-600",
+      "available": true
+    },
+    {
+      "id": "stf-04",
+      "name": "Vitumbua",
+      "description": "Fluffy coconut rice-flour doughnuts, pan-fried and dusted with sugar.",
+      "price": 2000,
+      "icon": "Cookie",
+      "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=640&q=75&auto=format&fit=crop",
+      "category": "street",
+      "tags": [
+        "Sweet",
+        "Snack"
+      ],
+      "rating": 4.6,
+      "prepMinutes": 10,
+      "gradient": "from-orange-300 to-rose-500",
+      "available": true
+    },
+    {
+      "id": "stf-05",
+      "name": "Viazi vya Karanga",
+      "description": "Twice-fried sweet potatoes with a rich peanut and tomato relish.",
+      "price": 3000,
+      "icon": "Salad",
+      "image": "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=640&q=75&auto=format&fit=crop",
+      "category": "street",
+      "tags": [
+        "Vegan"
+      ],
+      "rating": 4.3,
+      "prepMinutes": 12,
+      "gradient": "from-amber-400 to-yellow-700",
+      "available": true
+    },
+    {
+      "id": "sd-01",
+      "name": "Kachumbari",
+      "description": "Fresh tomato, red onion, coriander and chilli with a squeeze of lime.",
+      "price": 2000,
+      "icon": "Salad",
+      "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=640&q=75&auto=format&fit=crop",
+      "category": "sides",
+      "tags": [
+        "Fresh",
+        "Vegan"
+      ],
+      "rating": 4.6,
+      "prepMinutes": 5,
+      "gradient": "from-rose-300 to-red-500",
+      "available": true
+    },
+    {
+      "id": "sd-02",
+      "name": "Mchicha",
+      "description": "Sautéed amaranth greens with onion, tomato and a hint of peanut.",
+      "price": 3000,
+      "icon": "Leaf",
+      "image": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=640&q=75&auto=format&fit=crop",
+      "category": "sides",
+      "tags": [
+        "Vegan",
+        "Greens"
+      ],
+      "rating": 4.4,
+      "prepMinutes": 8,
+      "gradient": "from-green-400 to-emerald-700",
+      "available": true
+    },
+    {
+      "id": "sd-03",
+      "name": "Mkate na mayai",
+      "description": "morning breakfast",
+      "price": 3500,
+      "icon": "Utensils",
+      "image": "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=640&q=75&auto=format&fit=crop",
+      "category": "sides",
+      "tags": [
+        "Crispy"
+      ],
+      "rating": 4.5,
+      "prepMinutes": 9,
+      "gradient": "from-yellow-400 to-amber-600",
+      "available": true
+    },
+    {
+      "id": "sd-04",
+      "name": "Supu ya Mbuzi",
+      "description": "Slow-simmered goat broth with ginger, mchuzi spices and fresh herbs.",
+      "price": 4500,
+      "icon": "Soup",
+      "image": "https://images.unsplash.com/photo-1493770348161-369560ae357d?w=640&q=75&auto=format&fit=crop",
+      "category": "sides",
+      "tags": [
+        "Warming"
+      ],
+      "rating": 4.5,
+      "prepMinutes": 15,
+      "gradient": "from-stone-300 to-amber-600",
+      "available": true
+    },
+    {
+      "id": "ds-01",
+      "name": "cake",
+      "description": "Crunchy coconut and peanut brittle — a Zanzibar favourite.",
+      "price": 1500,
+      "icon": "Cookie",
+      "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=640&q=75&auto=format&fit=crop",
+      "category": "desserts",
+      "tags": [
+        "Sweet",
+        "Coastal"
+      ],
+      "rating": 4.7,
+      "prepMinutes": 5,
+      "gradient": "from-orange-300 to-amber-600",
+      "available": true
+    },
+    {
+      "id": "ds-02",
+      "name": "Matunda ya Moto",
+      "description": "Seasonal tropical fruit plate with lime and a dusting of chilli salt.",
+      "price": 4000,
+      "icon": "Salad",
+      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=640&q=75&auto=format&fit=crop",
+      "category": "desserts",
+      "tags": [
+        "Fresh",
+        "Vegan"
+      ],
+      "rating": 4.6,
+      "prepMinutes": 6,
+      "gradient": "from-pink-300 to-rose-500",
+      "available": true
+    },
+    {
+      "id": "ds-03",
+      "name": "Tiramisu ya Tangawizi",
+      "description": "Our ginger-spiced twist on the Italian classic. Light and creamy.",
+      "price": 8000,
+      "icon": "Cake",
+      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?w=640&q=75&auto=format&fit=crop",
+      "category": "desserts",
+      "tags": [
+        "Chef pick"
+      ],
+      "rating": 4.8,
+      "prepMinutes": 8,
+      "gradient": "from-amber-400 to-orange-600",
+      "available": true
+    },
+    {
+      "id": "dr-01",
+      "name": "Kahawa ya Kijiko",
+      "description": "Strong Tanzanian coffee, served black or with a splash of milk.",
+      "price": 500,
+      "icon": "Coffee",
+      "image": "/uploads/dish-1792495452042-47b352c7.jpg",
+      "category": "drinks",
+      "tags": [
+        "Hot"
+      ],
+      "rating": 4.7,
+      "prepMinutes": 5,
+      "gradient": "from-amber-600 to-stone-800",
+      "available": true
+    },
+    {
+      "id": "dr-02",
+      "name": "Jus ya Ndimi na Maembe",
+      "description": "Creamy avocado and mango juice, blended fresh to order.",
+      "price": 1000,
+      "icon": "GlassWater",
+      "image": "/uploads/dish-1792495495070-a32801e7.jpg",
+      "category": "drinks",
+      "tags": [
+        "Fresh",
+        "Popular"
+      ],
+      "rating": 4.8,
+      "prepMinutes": 6,
+      "gradient": "from-lime-400 to-emerald-600",
+      "available": true
+    },
+    {
+      "id": "dr-03",
+      "name": "Chai ya Tangawizi",
+      "description": "Spiced ginger tea with milk and a whisper of lemongrass.",
+      "price": 500,
+      "icon": "Milk",
+      "image": "/uploads/dish-1792495546814-ba1fe25a.jpg",
+      "category": "drinks",
+      "tags": [
+        "Warming"
+      ],
+      "rating": 4.5,
+      "prepMinutes": 6,
+      "gradient": "from-orange-300 to-amber-500",
+      "available": true
+    },
+    {
+      "id": "dr-04",
+      "name": "maji madogo",
+      "description": "cold or warm water all available.",
+      "price": 1500,
+      "icon": "Beer",
+      "image": "/uploads/dish-1792495728896-3c45953a.jpg",
+      "category": "drinks",
+      "tags": [
+        "Cold"
+      ],
+      "rating": 4.6,
+      "prepMinutes": 2,
+      "gradient": "from-amber-400 to-orange-500",
+      "available": true
+    },
+    {
+      "id": "it-b24cd4",
+      "name": "Supu na chapati",
+      "description": "supu ya mbuzi na chapati 2",
+      "price": 5000,
+      "category": "desserts",
+      "icon": "Soup",
+      "image": "/uploads/dish-1792495349951-05e5e441.jpg",
+      "tags": [],
+      "gradient": "from-emerald-400 to-teal-600",
+      "available": true
+    },
+    {
+      "id": "it-670f23",
+      "name": "Biriyani",
+      "description": "eggs,rice,goat meat and a sauce",
+      "price": 9000,
+      "category": "staples",
+      "icon": "Utensils",
+      "image": "/uploads/dish-1792496312604-5a94b1f8.jpg",
+      "tags": [],
+      "gradient": "from-brand-400 to-brand-700",
+      "available": true
+    },
+    {
+      "id": "it-a1270c",
+      "name": "pilau na nyama",
+      "description": "pilau ,kachumbari na nyama ya mbuzi",
+      "price": 4000,
+      "category": "staples",
+      "icon": "Utensils",
+      "image": "/uploads/dish-1792496347337-f4e4396b.jpg",
+      "tags": [],
+      "gradient": "from-yellow-300 to-amber-600",
+      "available": true
+    },
+    {
+      "id": "it-b1e8f1",
+      "name": "wali na maharage",
+      "description": "wali na matunda na maharage",
+      "price": 3000,
+      "category": "staples",
+      "icon": "Utensils",
+      "image": "/uploads/dish-1792496412149-b128189d.jpg",
+      "tags": [],
+      "gradient": "from-lime-400 to-emerald-700",
+      "available": true
+    },
+    {
+      "id": "it-75747a",
+      "name": "wali na nyama",
+      "description": "wali na nyama na mayai ya kuchemsha",
+      "price": 5000,
+      "category": "staples",
+      "icon": "Utensils",
+      "image": "/uploads/dish-1792496453116-8fbf5647.jpg",
+      "tags": [],
+      "gradient": "from-sky-400 to-blue-700",
+      "available": true
+    },
+    {
+      "id": "it-78f4f6",
+      "name": "Supu ya samaki",
+      "description": "supu nzuri yenye samaki na ndizi",
+      "price": 4000,
+      "category": "grill",
+      "icon": "Utensils",
+      "image": "/uploads/dish-1792496692827-8b963ff9.jpg",
+      "tags": [],
+      "gradient": "from-brand-500 to-brand-800",
+      "available": true
+    }
+  ]
+}
