@@ -158,7 +158,7 @@
       "description": "best combo of nyama choma and salad it comes with chips kavu",
       "price": 18000,
       "icon": "Beef",
-      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1504674900247-0877df9cc836.jpg",
       "category": "grill",
       "tags": [
         "Signature",
@@ -175,7 +175,7 @@
       "description": "Fragrant spiced pilau rice slow-cooked with tender beef and pilau masala.",
       "price": 3000,
       "icon": "Utensils",
-      "image": "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1585032226651-759b368d7246.jpg",
       "category": "staples",
       "tags": [
         "Popular",
@@ -192,7 +192,7 @@
       "description": "Creamy chicken curry served with steamed basmati rice and kachumbari.",
       "price": 11000,
       "icon": "Drumstick",
-      "image": "https://images.unsplash.com/photo-1626074353765-517a681e40be?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1626074353765-517a681e40be.jpg",
       "category": "grill",
       "tags": [
         "Popular"
@@ -208,7 +208,7 @@
       "description": "Soft maize porridge with slow-simmered beans in coconut gravy.",
       "price": 2000,
       "icon": "Wheat",
-      "image": "/uploads/dish-1792496076582-7d2c6800.jpg",
+      "image": "/uploads/dish-1792574707232-b4d9135d.jpg",
       "category": "staples",
       "tags": [
         "Budget",
@@ -225,7 +225,7 @@
       "description": "parachichi ,watermeloon ,embe and kachumbari",
       "price": 7000,
       "icon": "Leaf",
-      "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1512621776951-a57141f2eefd.jpg",
       "category": "sides",
       "tags": [
         "Vegan"
@@ -241,7 +241,7 @@
       "description": "Coconut bean stew with maize, a coastal comfort classic.",
       "price": 7500,
       "icon": "Soup",
-      "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1490645935967-10de6ba17061.jpg",
       "category": "sides",
       "tags": [
         "Coastal"
@@ -257,7 +257,7 @@
       "description": "Charcoal-grilled goat meat with kachumbari, na chuma ya pili pili.",
       "price": 18000,
       "icon": "Beef",
-      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1544025162-d76694265947.jpg",
       "category": "grill",
       "tags": [
         "Signature",
@@ -274,7 +274,7 @@
       "description": "Marinated beef skewers grilled over open coals. Served with chips or ugali.",
       "price": 13000,
       "icon": "Flame",
-      "image": "https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1432139555190-58524dae6a55.jpg",
       "category": "grill",
       "tags": [
         "Popular",
@@ -324,7 +324,7 @@
       "description": "Crispy fries folded into a golden egg omelette. A Dar street legend.",
       "price": 4000,
       "icon": "UtensilsCrossed",
-      "image": "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1551782450-a2132b4ba21d.jpg",
       "category": "street",
       "tags": [
         "Street",
@@ -341,7 +341,7 @@
       "description": "Golden pastry parcels spiced with beef, onion and cumin. Fried to order.",
       "price": 3000,
       "icon": "Utensils",
-      "image": "https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1484723091739-30a097e8f929.jpg",
       "category": "street",
       "tags": [
         "Snack"
@@ -374,7 +374,7 @@
       "description": "Fluffy coconut rice-flour doughnuts, pan-fried and dusted with sugar.",
       "price": 2000,
       "icon": "Cookie",
-      "image": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1567620905732-2d1ec7ab7445.jpg",
       "category": "street",
       "tags": [
         "Sweet",
@@ -391,7 +391,7 @@
       "description": "Twice-fried sweet potatoes with a rich peanut and tomato relish.",
       "price": 3000,
       "icon": "Salad",
-      "image": "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1498837167922-ddd27525d352.jpg",
       "category": "street",
       "tags": [
         "Vegan"
@@ -407,7 +407,7 @@
       "description": "Fresh tomato, red onion, coriander and chilli with a squeeze of lime.",
       "price": 2000,
       "icon": "Salad",
-      "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1540189549336-e6e99c3679fe.jpg",
       "category": "sides",
       "tags": [
         "Fresh",
@@ -424,7 +424,7 @@
       "description": "Sautéed amaranth greens with onion, tomato and a hint of peanut.",
       "price": 3000,
       "icon": "Leaf",
-      "image": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1482049016688-2d3e1b311543.jpg",
       "category": "sides",
       "tags": [
         "Vegan",
@@ -441,7 +441,7 @@
       "description": "morning breakfast",
       "price": 3500,
       "icon": "Utensils",
-      "image": "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1533089860892-a7c6f0a88666.jpg",
       "category": "sides",
       "tags": [
         "Crispy"
@@ -457,7 +457,7 @@
       "description": "Slow-simmered goat broth with ginger, mchuzi spices and fresh herbs.",
       "price": 4500,
       "icon": "Soup",
-      "image": "https://images.unsplash.com/photo-1493770348161-369560ae357d?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1493770348161-369560ae357d.jpg",
       "category": "sides",
       "tags": [
         "Warming"
@@ -473,7 +473,7 @@
       "description": "Crunchy coconut and peanut brittle — a Zanzibar favourite.",
       "price": 1500,
       "icon": "Cookie",
-      "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1578985545062-69928b1d9587.jpg",
       "category": "desserts",
       "tags": [
         "Sweet",
@@ -490,7 +490,7 @@
       "description": "Seasonal tropical fruit plate with lime and a dusting of chilli salt.",
       "price": 4000,
       "icon": "Salad",
-      "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1546069901-ba9599a7e63c.jpg",
       "category": "desserts",
       "tags": [
         "Fresh",
@@ -507,7 +507,7 @@
       "description": "Our ginger-spiced twist on the Italian classic. Light and creamy.",
       "price": 8000,
       "icon": "Cake",
-      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae?w=640&q=75&auto=format&fit=crop",
+      "image": "/uploads/photo-1559847844-5315695dadae.jpg",
       "category": "desserts",
       "tags": [
         "Chef pick"
@@ -523,7 +523,7 @@
       "description": "Strong Tanzanian coffee, served black or with a splash of milk.",
       "price": 500,
       "icon": "Coffee",
-      "image": "/uploads/dish-1792495452042-47b352c7.jpg",
+      "image": "/uploads/dish-1792528366062-2b69fafb.jpg",
       "category": "drinks",
       "tags": [
         "Hot"
@@ -601,7 +601,7 @@
       "price": 9000,
       "category": "staples",
       "icon": "Utensils",
-      "image": "/uploads/dish-1792496312604-5a94b1f8.jpg",
+      "image": "/uploads/dish-1792574770009-0097f4f1.jpg",
       "tags": [],
       "gradient": "from-brand-400 to-brand-700",
       "available": true
@@ -613,7 +613,7 @@
       "price": 4000,
       "category": "staples",
       "icon": "Utensils",
-      "image": "/uploads/dish-1792496347337-f4e4396b.jpg",
+      "image": "/uploads/dish-1792527814460-e63f280d.jpg",
       "tags": [],
       "gradient": "from-yellow-300 to-amber-600",
       "available": true
@@ -637,7 +637,7 @@
       "price": 5000,
       "category": "staples",
       "icon": "Utensils",
-      "image": "/uploads/dish-1792496453116-8fbf5647.jpg",
+      "image": "/uploads/dish-1792528918857-34043c9b.jpg",
       "tags": [],
       "gradient": "from-sky-400 to-blue-700",
       "available": true
@@ -652,6 +652,20 @@
       "image": "/uploads/dish-1792496692827-8b963ff9.jpg",
       "tags": [],
       "gradient": "from-brand-500 to-brand-800",
+      "available": true
+    },
+    {
+      "id": "it-54e0d9",
+      "name": "TestPic",
+      "description": "x",
+      "price": 1000,
+      "category": "drinks",
+      "icon": "x",
+      "image": "/uploads/dish-1792526567304-61815104.gif",
+      "tags": [
+        "test"
+      ],
+      "gradient": "from-amber-400 to-orange-600",
       "available": true
     }
   ]

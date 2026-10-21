@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: food-point-api
+    runtime: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/menu
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: STORAGE_DRIVER
+        value: disk
+      - key: DATA_DIR
+        value: /var/data
+      - key: CORS_ORIGIN
+        value: https://food-ordering-sigma-ashen.vercel.app
+    disk:
+      name: food-point-data
+      mountPath: /var/data
+      sizeGB: 1

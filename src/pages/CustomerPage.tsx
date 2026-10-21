@@ -15,7 +15,7 @@ import {
   UtensilsCrossed,
   ArrowRight,
 } from 'lucide-react'
-import { fetchMenu, fetchOrder, subscribe, placeOrder } from '../api'
+import { fetchMenu, fetchOrder, placeOrder } from '../api'
 import type { MenuResponse, Order, KisiniaCartLine, KisiniaConfig } from '../types'
 import { getIcon } from '../icons'
 import { money } from '../utils'
@@ -94,22 +94,38 @@ export default function CustomerPage() {
       .catch(() => {})
   }, [])
 
-  // Live menu updates from the office
+  // Live menu updates + order tracking
   useEffect(() => {
-    return subscribe((type, data) => {
-      if (type === 'menu:updated') {
-        const payload = data as { items: MenuResponse['items']; kisinia?: KisiniaConfig }
-        setMenu((prev) =>
-          prev
-            ? { ...prev, items: payload.items, kisinia: payload.kisinia ?? prev.kisinia }
-            : prev
-        )
-        return
-      }
-      const o = data as Order
-      setHistory((prev) => prev.map((h) => (h.code === o.code ? o : h)))
-      if (activeOrder && o.code === activeOrder.code) setActiveOrder(o)
-    })
+    let mounted = true
+    const tickMenu = async () => {
+      try {
+        const m = await fetchMenu()
+        if (mounted) setMenu(m)
+      } catch {}
+    }
+    tickMenu()
+    const tm = setInterval(tickMenu, 12000)
+    return () => {
+      mounted = false
+      clearInterval(tm)
+    }
+  }, [])
+
+  useEffect(() => {
+    let mounted = true
+    const tick = async () => {
+      if (!activeOrder) return
+      try {
+        const o = await fetchOrder(activeOrder.code)
+        if (mounted) setActiveOrder(o)
+      } catch {}
+    }
+    tick()
+    const t = setInterval(tick, 5000)
+    return () => {
+      mounted = false
+      clearInterval(t)
+    }
   }, [activeOrder])
 
   const currency = menu?.restaurant.currency ?? 'TSh'

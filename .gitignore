@@ -5,3 +5,5 @@ dist/
 # Live data (orders are runtime state; menu.json ships as seed)
 server/data/orders.json
 server/data/uploads/
+
+.vercel

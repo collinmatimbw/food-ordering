@@ -6,7 +6,15 @@ import type {
   KisiniaConfig,
 } from './types'
 
-const BASE = '/api'
+export const API_ORIGIN = (import.meta.env.VITE_API_BASE || '').replace(/\/$/, '')
+const BASE = `${API_ORIGIN}/api`
+
+/** Resolve a possibly-relative upload path against the API origin. */
+export function resolveAssetUrl(url?: string): string | undefined {
+  if (!url) return url
+  if (/^https?:\/\//i.test(url)) return url
+  return API_ORIGIN + url
+}
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
@@ -84,7 +92,7 @@ export const uploadImage = async (file: File): Promise<string> => {
   const res = await fetch(`${BASE}/uploads`, { method: 'POST', body: fd })
   const data = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error((data as any)?.error || `Upload failed (${res.status})`)
-  return (data as any).url as string
+  return resolveAssetUrl((data as any).url as string) as string
 }
 
 /** Save the kisinia platter config (office). */
@@ -94,20 +102,6 @@ export const saveKisinia = (config: KisiniaConfig) =>
     body: JSON.stringify(config),
   })
 
-export function subscribe(onEvent: (type: string, data: unknown) => void): () => void {
-  const source = new EventSource(`${BASE}/stream`)
-
-  const handler = (type: string) => (e: MessageEvent) => {
-    try {
-      onEvent(type, JSON.parse(e.data))
-    } catch {
-      /* ignore malformed frames */
-    }
-  }
-
-  source.addEventListener('order:new', handler('order:new'))
-  source.addEventListener('order:updated', handler('order:updated'))
-  source.addEventListener('menu:updated', handler('menu:updated'))
-
-  return () => source.close()
+export function subscribe(_onEvent: (type: string, data: unknown) => void): () => void {
+  return () => {}
 }

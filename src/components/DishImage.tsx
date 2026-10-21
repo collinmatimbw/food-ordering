@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { getIcon } from '../icons'
+import { resolveAssetUrl } from '../api'
 
 export default function DishImage({
   src,
@@ -19,17 +20,26 @@ export default function DishImage({
   eager?: boolean
 }) {
   const [failed, setFailed] = useState(false)
+  const [retry, setRetry] = useState(0)
   const Icon = getIcon(icon)
-  const showPhoto = src && !failed
+  const resolved = resolveAssetUrl(src)
+  const showPhoto = resolved && !failed
+  const bustedSrc =
+    retry > 0 && resolved
+      ? resolved + (resolved.includes('?') ? '&' : '?') + 'retry=' + retry
+      : resolved
 
   return (
     <div className={`relative overflow-hidden bg-slate-100 ${className}`}>
       {showPhoto ? (
         <img
-          src={src}
+          src={bustedSrc}
           alt={alt}
           loading={eager ? 'eager' : 'lazy'}
-          onError={() => setFailed(true)}
+          onError={() => {
+            if (retry < 2) setRetry((r) => r + 1)
+            else setFailed(true)
+          }}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
       ) : (

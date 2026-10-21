@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { fetchMenu, fetchOrders, subscribe, updateOrderStatus } from '../api'
+import { fetchMenu, fetchOrders, updateOrderStatus } from '../api'
 import type { MenuResponse, Order, OrderStatus } from '../types'
 import { STATUS_META, StatusPill } from '../components/StatusPill'
 import { TableBadge } from '../components/TablePicker'
@@ -123,28 +123,65 @@ export default function OfficePage() {
   }, [])
 
   useEffect(() => {
-    return subscribe((type, data) => {
-      if (type === 'menu:updated') {
-        const payload = data as { items: MenuResponse['items']; kisinia?: MenuResponse['kisinia'] }
-        setMenu((prev) =>
-          prev ? { ...prev, items: payload.items, kisinia: payload.kisinia ?? prev.kisinia } : prev
-        )
-        return
+    let mounted = true
+    const tick = async () => {
+      try {
+        const list = await fetchOrders()
+        if (!mounted) return
+        const incoming = Array.isArray(list) ? list : []
+        setOrders((prev) => {
+          const next: Order[] = []
+          for (const o of incoming) {
+            const old = prev.find((x) => x.code === o.code)
+            if (old && old.status !== o.status && !seen.current.has(o.code + ':' + o.status)) {
+              // mark seen by status change to avoid repeat; simpler track
+            }
+            if (!seen.current.has(o.code)) {
+              if (old) {
+                /* update */
+              } else {
+                seen.current.add(o.code)
+                if (soundRef.current) beep()
+                toast(`New order ${o.code} · Table ${o.table}`, 'info')
+              }
+            } else {
+              if (old && old.status !== o.status && o.status === 'ready' && soundRef.current) {
+                try {
+                  beep()
+                } catch {}
+              }
+            }
+            next.push(o)
+          }
+          return next.sort((a, b) => b.createdAt - a.createdAt)
+        })
+      } catch {
+        /* ignore */
       }
-      const o = data as Order
-      setOrders((prev) => {
-        const idx = prev.findIndex((x) => x.code === o.code)
-        if (idx === -1) return [o, ...prev]
-        const next = [...prev]
-        next[idx] = o
-        return next
-      })
-      if (type === 'order:new' && !seen.current.has(o.code)) {
-        seen.current.add(o.code)
-        if (soundRef.current) beep()
-        toast(`New order ${o.code} · Table ${o.table}`, 'info')
+    }
+    tick()
+    const t = setInterval(tick, 6000)
+    return () => {
+      mounted = false
+      clearInterval(t)
+    }
+  }, [])
+
+  useEffect(() => {
+    let mounted = true
+    const tickMenu = async () => {
+      try {
+        const m = await fetchMenu()
+        if (mounted) setMenu(m)
+      } catch {
+        /* ignore */
       }
-    })
+    }
+    const t = setInterval(tickMenu, 12000)
+    return () => {
+      mounted = false
+      clearInterval(t)
+    }
   }, [])
 
   const [, force] = useState(0)
