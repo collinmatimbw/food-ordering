@@ -13,7 +13,8 @@ const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data')
 const MENU_FILE = path.join(DATA_DIR, 'menu.json')
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json')
 const UPLOAD_DIR = path.join(DATA_DIR, 'uploads')
-const SEED_DIR = path.join(__dirname, 'data')
+const BUNDLED_SEED = path.join(__dirname, 'seed')
+const SEED_DIR = fs.existsSync(BUNDLED_SEED) ? BUNDLED_SEED : path.join(__dirname, 'data')
 
 try {
   fs.mkdirSync(UPLOAD_DIR, { recursive: true })
@@ -36,6 +37,18 @@ function seedIfMissing() {
     } catch (err) {
       console.error(`Failed to seed ${name}:`, err)
     }
+  }
+
+  // Copy bundled uploads into the data dir when it is still empty.
+  const seedUploads = path.join(SEED_DIR, 'uploads')
+  try {
+    if (fs.existsSync(seedUploads) && fs.readdirSync(UPLOAD_DIR).length === 0) {
+      for (const name of fs.readdirSync(seedUploads)) {
+        fs.copyFileSync(path.join(seedUploads, name), path.join(UPLOAD_DIR, name))
+      }
+    }
+  } catch (err) {
+    console.error('Failed to seed uploads:', err)
   }
 }
 seedIfMissing()

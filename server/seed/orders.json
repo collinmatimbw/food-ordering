@@ -1,0 +1,489 @@
+{
+  "orders": [
+    {
+      "code": "SV-5BF8-110",
+      "table": 3,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "__kisinia__",
+          "name": "Kisinia Platter · Watu 4",
+          "icon": "UtensilsCrossed",
+          "price": 102000,
+          "qty": 1,
+          "note": "",
+          "kisinia": {
+            "sizeId": "watu4",
+            "sizeName": "Watu 4",
+            "slots": 8,
+            "picks": [
+              {
+                "name": "Wali",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Chips",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Kuku (Chicken)",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Nyama ya Mbuzi",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Samaki",
+                "qty": 1,
+                "price": 14000
+              },
+              {
+                "name": "Matunda",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Ndizi",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Maharage",
+                "qty": 1,
+                "price": 3000
+              },
+              {
+                "name": "Ugali",
+                "qty": 1,
+                "price": 2000
+              }
+            ],
+            "overflow": 2000,
+            "unitPrice": 102000
+          }
+        }
+      ],
+      "note": "",
+      "subtotal": 102000,
+      "service": 5100,
+      "total": 107100,
+      "status": "cancelled",
+      "createdAt": 1792480424632,
+      "updatedAt": 1792492305154
+    },
+    {
+      "code": "SV-EB55-109",
+      "table": 18,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "__kisinia__",
+          "name": "Kisinia Platter · Watu 6",
+          "icon": "UtensilsCrossed",
+          "price": 150000,
+          "qty": 1,
+          "note": "",
+          "kisinia": {
+            "sizeId": "watu6",
+            "sizeName": "Watu 6",
+            "slots": 12,
+            "picks": [
+              {
+                "name": "Wali",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Chips",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Kuku (Chicken)",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Nyama ya Mbuzi",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Samaki",
+                "qty": 1,
+                "price": 14000
+              },
+              {
+                "name": "Kachumbari",
+                "qty": 1,
+                "price": 2000
+              },
+              {
+                "name": "Matunda",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Ndizi",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Maharage",
+                "qty": 1,
+                "price": 3000
+              },
+              {
+                "name": "Viazi vya Karanga",
+                "qty": 1,
+                "price": 3000
+              },
+              {
+                "name": "Sambusa (4 pcs)",
+                "qty": 1,
+                "price": 3000
+              }
+            ],
+            "overflow": 0,
+            "unitPrice": 150000
+          }
+        }
+      ],
+      "note": "",
+      "subtotal": 150000,
+      "service": 7500,
+      "total": 157500,
+      "status": "ready",
+      "createdAt": 1792478675958,
+      "updatedAt": 1792478704032
+    },
+    {
+      "code": "SV-0F57-108",
+      "table": 3,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "__kisinia__",
+          "name": "Kisinia Platter · Watu 4",
+          "icon": "UtensilsCrossed",
+          "price": 102000,
+          "qty": 1,
+          "note": "",
+          "kisinia": {
+            "sizeId": "watu4",
+            "sizeName": "Watu 4",
+            "slots": 8,
+            "picks": [
+              {
+                "name": "Wali",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Chips",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Kuku (Chicken)",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Nyama ya Mbuzi",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Samaki",
+                "qty": 1,
+                "price": 14000
+              },
+              {
+                "name": "Matunda",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Ndizi",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Maharage",
+                "qty": 1,
+                "price": 3000
+              },
+              {
+                "name": "Ugali",
+                "qty": 1,
+                "price": 2000
+              }
+            ],
+            "overflow": 2000,
+            "unitPrice": 102000
+          }
+        }
+      ],
+      "note": "",
+      "subtotal": 102000,
+      "service": 5100,
+      "total": 107100,
+      "status": "cancelled",
+      "createdAt": 1792478356919,
+      "updatedAt": 1792501464057
+    },
+    {
+      "code": "SV-9A13-107",
+      "table": 3,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "__kisinia__",
+          "name": "Kisinia Platter · Watu 4",
+          "icon": "UtensilsCrossed",
+          "price": 102000,
+          "qty": 1,
+          "note": "",
+          "kisinia": {
+            "sizeId": "watu4",
+            "sizeName": "Watu 4",
+            "slots": 8,
+            "picks": [
+              {
+                "name": "Wali",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Chips",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Kuku (Chicken)",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Nyama ya Mbuzi",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Samaki",
+                "qty": 1,
+                "price": 14000
+              },
+              {
+                "name": "Matunda",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Ndizi",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Maharage",
+                "qty": 1,
+                "price": 3000
+              },
+              {
+                "name": "Ugali",
+                "qty": 1,
+                "price": 2000
+              }
+            ],
+            "overflow": 2000,
+            "unitPrice": 102000
+          }
+        }
+      ],
+      "note": "",
+      "subtotal": 102000,
+      "service": 5100,
+      "total": 107100,
+      "status": "new",
+      "createdAt": 1792478079509,
+      "updatedAt": 1792478079509
+    },
+    {
+      "code": "SV-B676-106",
+      "table": 1,
+      "customer": "Smoke Test",
+      "items": [
+        {
+          "id": "__kisinia__",
+          "name": "Kisinia Platter · Watu 2",
+          "icon": "UtensilsCrossed",
+          "price": 54000,
+          "qty": 1,
+          "note": "",
+          "kisinia": {
+            "sizeId": "watu2",
+            "sizeName": "Watu 2",
+            "slots": 5,
+            "picks": [
+              {
+                "name": "Nyama ya Mbuzi",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Matunda",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Kuku (Chicken)",
+                "qty": 1,
+                "price": 15000
+              },
+              {
+                "name": "Chips",
+                "qty": 1,
+                "price": 5000
+              },
+              {
+                "name": "Wali",
+                "qty": 1,
+                "price": 4000
+              },
+              {
+                "name": "Samaki",
+                "qty": 1,
+                "price": 14000
+              }
+            ],
+            "overflow": 4000,
+            "unitPrice": 54000
+          }
+        }
+      ],
+      "note": "kisinia smoke",
+      "subtotal": 54000,
+      "service": 2700,
+      "total": 56700,
+      "status": "cancelled",
+      "createdAt": 1792473146263,
+      "updatedAt": 1792528806497
+    },
+    {
+      "code": "SV-942A-105",
+      "table": 6,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "st-02",
+          "name": "Pilau ya Nyama",
+          "icon": "Utensils",
+          "price": 12000,
+          "qty": 1,
+          "note": ""
+        }
+      ],
+      "note": "",
+      "subtotal": 12000,
+      "service": 600,
+      "total": 12600,
+      "status": "preparing",
+      "createdAt": 1792468350227,
+      "updatedAt": 1792468361763
+    },
+    {
+      "code": "SV-3980-104",
+      "table": 5,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "st-03",
+          "name": "Mchuzi wa Kuku na Wali",
+          "icon": "Drumstick",
+          "price": 11000,
+          "qty": 1,
+          "note": ""
+        }
+      ],
+      "note": "",
+      "subtotal": 11000,
+      "service": 550,
+      "total": 11550,
+      "status": "delivered",
+      "createdAt": 1792467308151,
+      "updatedAt": 1792472525726
+    },
+    {
+      "code": "SV-8EAB-103",
+      "table": 5,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "mn-05",
+          "name": "Butter Chicken",
+          "icon": "Drumstick",
+          "price": 25000,
+          "qty": 1,
+          "note": ""
+        }
+      ],
+      "note": "",
+      "subtotal": 25000,
+      "service": 1250,
+      "total": 26250,
+      "status": "new",
+      "createdAt": 1792440631574,
+      "updatedAt": 1792440631574
+    },
+    {
+      "code": "SV-1D89-102",
+      "table": 5,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "st-01",
+          "name": "Truffle Arancini",
+          "emoji": "🍡",
+          "price": 9.5,
+          "qty": 1,
+          "note": ""
+        }
+      ],
+      "note": "",
+      "subtotal": 9.5,
+      "service": 0.48,
+      "total": 9.98,
+      "status": "new",
+      "createdAt": 1792436579073,
+      "updatedAt": 1792436579073
+    },
+    {
+      "code": "SV-918D-101",
+      "table": 5,
+      "customer": "Guest",
+      "items": [
+        {
+          "id": "st-01",
+          "name": "Truffle Arancini",
+          "emoji": "🍡",
+          "price": 9.5,
+          "qty": 1,
+          "note": ""
+        }
+      ],
+      "note": "",
+      "subtotal": 9.5,
+      "service": 0.48,
+      "total": 9.98,
+      "status": "new",
+      "createdAt": 1792095470843,
+      "updatedAt": 1792095470843
+    }
+  ]
+}

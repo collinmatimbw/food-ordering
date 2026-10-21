@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
-const DATA_DIR = path.join(ROOT, 'server', 'data')
+const DATA_DIR = path.join(ROOT, 'server', 'seed')
 const UPLOAD_DIR = path.join(DATA_DIR, 'uploads')
 
 const SOURCE = (process.argv[2] || 'https://food-ordering-sigma-ashen.vercel.app').replace(/\/$/, '')
