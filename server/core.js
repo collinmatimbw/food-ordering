@@ -322,6 +322,30 @@ export function buildApi({ storage }) {
     })
   })
 
+  app.post('/api/menu/categories', async (req, res) => {
+    await ensureLoaded()
+    const body = req.body || {}
+    const name = String(body.name || '').trim().slice(0, 40)
+    const icon = String(body.icon || 'Utensils').trim().slice(0, 40)
+    if (!name) return res.status(400).json({ error: 'Category name is required.' })
+
+    const id =
+      String(body.id || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 24) || 'cat-' + crypto.randomBytes(3).toString('hex')
+
+    if (menuState.categories.some((c) => c.id === id || c.name.toLowerCase() === name.toLowerCase()))
+      return res.status(409).json({ error: 'Category already exists.' })
+
+    const category = { id, name, icon }
+    menuState.categories.push(category)
+    persistMenu()
+    res.status(201).json(category)
+  })
+
   app.post('/api/menu/items', async (req, res) => {
     await ensureLoaded()
     const clean = sanitizeItem(req.body || {})
