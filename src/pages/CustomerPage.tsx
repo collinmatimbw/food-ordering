@@ -245,7 +245,7 @@ export default function CustomerPage() {
               </div>
               <div className="min-w-0 leading-none">
                 <h1 className="font-display truncate text-[15px] font-extrabold tracking-tight text-ink-900 sm:text-[17px]">
-                  {menu?.restaurant.name ?? 'Food Point'}
+                  {menu?.restaurant.name ?? 'Willis Lounge'}
                 </h1>
                 <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-ink-500">
                   <MapPin className="h-3 w-3 shrink-0 text-brand-500" />
@@ -336,9 +336,9 @@ export default function CustomerPage() {
                   <Clock className="h-3 w-3" /> Open now · 08:00 – 23:00
                 </span>
                 <h2 className="font-display mt-3 text-xl font-extrabold leading-tight text-white sm:text-2xl md:text-3xl">
-                  Karibu Food Point.
+                  Karibu Willis Lounge.
                   <br />
-                  Authentic Tanzanian kitchen.
+                  Bar, grill & kitchen.
                 </h2>
                 <p className="mt-2 max-w-md text-[13px] leading-relaxed text-white/85 sm:text-sm">
                   Order from your table — nyama choma, pilau, chips mayai and more.

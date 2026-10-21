@@ -313,6 +313,34 @@ export function buildApi({ storage }) {
     res.json(menuState)
   })
 
+  app.patch('/api/restaurant', async (req, res) => {
+    await ensureLoaded()
+    const body = req.body || {}
+    const next = { ...menuState.restaurant }
+
+    if (body.name !== undefined) {
+      const name = String(body.name).trim().slice(0, 60)
+      if (!name) return res.status(400).json({ error: 'Restaurant name is required.' })
+      next.name = name
+    }
+    if (body.tagline !== undefined) next.tagline = String(body.tagline).trim().slice(0, 120)
+    if (body.currency !== undefined) {
+      const currency = String(body.currency).trim().slice(0, 8)
+      if (!currency) return res.status(400).json({ error: 'Currency is required.' })
+      next.currency = currency
+    }
+    if (body.tables !== undefined) {
+      const tables = parseInt(body.tables, 10)
+      if (!Number.isFinite(tables) || tables < 1 || tables > 200)
+        return res.status(400).json({ error: 'Table count must be between 1 and 200.' })
+      next.tables = tables
+    }
+
+    menuState.restaurant = next
+    persistMenu()
+    res.json(next)
+  })
+
   app.get('/api/config', async (_req, res) => {
     await ensureLoaded()
     res.json({

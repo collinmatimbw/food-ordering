@@ -414,7 +414,7 @@ export default function OfficePage() {
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-brand-600">
-                  Food Point · Office
+                  Willis Lounge · Office
                 </p>
                 <h1 className="font-display mt-0.5 text-[26px] font-light leading-tight text-ink-900">
                   {viewMeta[view].title}
@@ -1068,7 +1068,7 @@ export default function OfficePage() {
           {/* Footer */}
           <footer className="mt-auto border-t border-slate-200/60 px-6 py-5 text-center xl:px-10">
             <p className="text-[10px] uppercase tracking-[0.24em] text-slate-400">
-              Food Point · Office CRM
+              Willis Lounge · Office CRM
             </p>
           </footer>
         </div>
@@ -1295,7 +1295,7 @@ function SidebarContent({
           <Building2 className="h-5 w-5" />
         </div>
         <div>
-          <p className="font-display text-[15px] font-extrabold leading-none">Food Point</p>
+          <p className="font-display text-[15px] font-extrabold leading-none">Willis Lounge</p>
           <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/40">
             Office CRM
           </p>

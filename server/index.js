@@ -27,5 +27,5 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Food Point API running on http://localhost:${PORT}`)
+  console.log(`Willis Lounge API running on http://localhost:${PORT}`)
 })
