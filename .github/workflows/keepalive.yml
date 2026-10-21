@@ -9,7 +9,7 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Render API
+      - name: Ping Render API + Supabase storage
         run: |
-          curl -fsS --max-time 120 https://food-point-api.onrender.com/api/menu > /dev/null
-          echo "API awake"
+          curl -fsS --max-time 120 https://food-point-api.onrender.com/api/health
+          echo "API + storage awake"

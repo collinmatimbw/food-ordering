@@ -232,6 +232,12 @@ function makeSupabaseStorage() {
       const { data } = supabaseClient.storage.from(bucket).getPublicUrl(name)
       return { url: data.publicUrl, name: originalname, size: buffer.length }
     },
+    async ping() {
+      // Storage-backed API call; keeps the Supabase free project active.
+      const { error } = await supabaseClient.storage.from(bucket).list('data', { limit: 1 })
+      if (error) throw new Error(error.message)
+      return { driver: 'supabase', ok: true }
+    },
     serveUploads() {},
   }
 }

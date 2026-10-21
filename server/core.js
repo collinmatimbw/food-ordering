@@ -296,6 +296,18 @@ export function buildApi({ storage }) {
     }
   })
 
+  app.get('/api/health', async (_req, res) => {
+    try {
+      const info =
+        typeof storage.ping === 'function'
+          ? await storage.ping()
+          : { driver: 'local', ok: true }
+      res.json({ ok: true, storage: info, time: new Date().toISOString() })
+    } catch (err) {
+      res.status(500).json({ ok: false, error: err instanceof Error ? err.message : 'ping failed' })
+    }
+  })
+
   app.get('/api/menu', async (_req, res) => {
     await ensureLoaded()
     res.json(menuState)
