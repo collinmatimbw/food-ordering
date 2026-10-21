@@ -1,9 +1,9 @@
-services:
+﻿services:
   - type: web
     name: food-point-api
     runtime: node
     plan: starter
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /api/menu
     envVars:
