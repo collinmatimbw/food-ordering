@@ -48,6 +48,18 @@ export function buildApi({ storage }) {
   )
   app.use(express.json())
 
+  // Staff-only routes. When OFFICE_KEY is configured, callers must send it in
+  // the `x-office-key` header. This keeps customer details off the public API.
+  const OFFICE_KEY = String(process.env.OFFICE_KEY || '').trim()
+  function requireOffice(req, res, next) {
+    if (!OFFICE_KEY) return next()
+    const provided = String(req.headers['x-office-key'] || '').trim()
+    const a = Buffer.from(provided)
+    const b = Buffer.from(OFFICE_KEY)
+    if (a.length === b.length && crypto.timingSafeEqual(a, b)) return next()
+    res.status(401).json({ error: 'Office key required.' })
+  }
+
   // Multer setup for memory storage (serverless) with fallback metadata
   const upload = multer({
     storage: multer.memoryStorage(),
@@ -288,7 +300,7 @@ export function buildApi({ storage }) {
   });
 
   // Upload route (memory storage -> storage.putUpload)
-  app.post('/api/uploads', upload.single('file'), async (req, res, next) => {
+  app.post('/api/uploads', requireOffice, upload.single('file'), async (req, res, next) => {
     try {
       if (!req.file) return res.status(400).json({ error: 'No image file received.' })
       const result = await storage.putUpload({
@@ -321,7 +333,7 @@ export function buildApi({ storage }) {
     res.json(menuState)
   })
 
-  app.patch('/api/restaurant', async (req, res) => {
+  app.patch('/api/restaurant', requireOffice, async (req, res) => {
     await ensureLoaded()
     const body = req.body || {}
     const next = { ...menuState.restaurant }
@@ -358,7 +370,7 @@ export function buildApi({ storage }) {
     })
   })
 
-  app.post('/api/menu/categories', async (req, res) => {
+  app.post('/api/menu/categories', requireOffice, async (req, res) => {
     await ensureLoaded()
     const body = req.body || {}
     const name = String(body.name || '').trim().slice(0, 40)
@@ -382,7 +394,7 @@ export function buildApi({ storage }) {
     res.status(201).json(category)
   })
 
-  app.delete('/api/menu/categories/:id', async (req, res) => {
+  app.delete('/api/menu/categories/:id', requireOffice, async (req, res) => {
     await ensureLoaded()
     const id = String(req.params.id || '').trim().toLowerCase()
     const idx = menuState.categories.findIndex((c) => c.id.toLowerCase() === id)
@@ -398,7 +410,7 @@ export function buildApi({ storage }) {
     res.json({ ok: true, id: removed.id })
   })
 
-  app.post('/api/menu/items', async (req, res) => {
+  app.post('/api/menu/items', requireOffice, async (req, res) => {
     await ensureLoaded()
     const clean = sanitizeItem(req.body || {})
     if (clean.error) return res.status(400).json({ error: clean.error })
@@ -415,7 +427,7 @@ export function buildApi({ storage }) {
     res.status(201).json(item)
   })
 
-  app.patch('/api/menu/items/:id', async (req, res) => {
+  app.patch('/api/menu/items/:id', requireOffice, async (req, res) => {
     await ensureLoaded()
     const item = menuState.items.find((i) => i.id === req.params.id)
     if (!item) return res.status(404).json({ error: 'Item not found' })
@@ -457,7 +469,7 @@ export function buildApi({ storage }) {
     res.json(item)
   })
 
-  app.delete('/api/menu/items/:id', async (req, res) => {
+  app.delete('/api/menu/items/:id', requireOffice, async (req, res) => {
     await ensureLoaded()
     const idx = menuState.items.findIndex((i) => i.id === req.params.id)
     if (idx === -1) return res.status(404).json({ error: 'Item not found' })
@@ -467,7 +479,7 @@ export function buildApi({ storage }) {
     res.json({ ok: true, id: removed.id })
   })
 
-  app.put('/api/kisinia', async (req, res) => {
+  app.put('/api/kisinia', requireOffice, async (req, res) => {
     await ensureLoaded()
     const clean = sanitizeKisinia(req.body || {})
     if (clean.error) return res.status(400).json({ error: clean.error })
@@ -477,35 +489,39 @@ export function buildApi({ storage }) {
     res.json(menuState.kisinia)
   })
 
-  app.get('/api/orders', async (_req, res) => {
+  app.get('/api/orders', requireOffice, async (_req, res) => {
     await ensureLoaded()
     const sorted = [...ordersState.orders].sort((a, b) => b.createdAt - a.createdAt)
     res.json(sorted)
   })
+
+  const phoneTail = (s) => String(s || '').replace(/\D/g, '').slice(-9)
 
   app.get('/api/orders/track', async (req, res) => {
     await ensureLoaded()
     const code = String(req.query.code || '').trim()
     const phone = String(req.query.phone || '').trim()
     if (!code) return res.status(400).json({ error: 'Enter your order code.' })
+    if (!phone) return res.status(400).json({ error: 'Enter the phone number used for this order.' })
 
     const order = ordersState.orders.find((o) => o.code.toLowerCase() === code.toLowerCase())
-    if (!order) return res.status(404).json({ error: 'No order found with that code.' })
-
-    const norm = (s) => String(s || '').replace(/\D/g, '').slice(-9)
-    if (order.phone) {
-      if (!phone) return res.status(401).json({ error: 'Enter the phone number used for this order.' })
-      if (norm(order.phone) !== norm(phone))
-        return res.status(404).json({ error: 'No order found with that code and phone number.' })
-    }
+    // Orders without a phone on file are never exposed to customers.
+    if (!order || !order.phone) return res.status(404).json({ error: 'No order found with that code and phone number.' })
+    if (phoneTail(order.phone) !== phoneTail(phone))
+      return res.status(404).json({ error: 'No order found with that code and phone number.' })
 
     res.json(order)
   })
 
   app.get('/api/orders/:code', async (req, res) => {
     await ensureLoaded()
+    const phone = String(req.query.phone || '').trim()
+    if (!phone) return res.status(400).json({ error: 'Enter the phone number used for this order.' })
+
     const order = ordersState.orders.find((o) => o.code.toLowerCase() === req.params.code.toLowerCase())
-    if (!order) return res.status(404).json({ error: 'Order not found' })
+    if (!order || !order.phone) return res.status(404).json({ error: 'Order not found' })
+    if (phoneTail(order.phone) !== phoneTail(phone)) return res.status(404).json({ error: 'Order not found' })
+
     res.json(order)
   })
 
@@ -516,15 +532,17 @@ export function buildApi({ storage }) {
     const orderType = type === 'delivery' || type === 'takeaway' || type === 'remote' ? type : 'dine_in'
     let tableNum = null
 
+    const phoneClean = String(phone || '').trim().slice(0, 40)
+    if (!/\d{7,}/.test(phoneClean.replace(/\D/g, '')))
+      return res.status(400).json({ error: 'Please provide a valid phone number so you can track your order.' })
+
     if (orderType === 'dine_in') {
       tableNum = parseInt(table, 10)
       if (!Number.isFinite(tableNum) || tableNum < 1 || tableNum > menuState.restaurant.tables) {
         return res.status(400).json({ error: `Please choose a table between 1 and ${menuState.restaurant.tables}.` })
       }
     } else {
-      const p = String(phone || '').trim()
       const addr = String(address || location || '').trim()
-      if (!p) return res.status(400).json({ error: 'Please provide a phone number.' })
       if (orderType === 'delivery' && !addr)
         return res.status(400).json({ error: 'Please provide a delivery location/address.' })
     }
@@ -542,7 +560,7 @@ export function buildApi({ storage }) {
       code: orderCode(),
       type: orderType,
       table: tableNum,
-      phone: orderType !== 'dine_in' ? String(phone || '').trim().slice(0, 40) : '',
+      phone: phoneClean,
       address: orderType !== 'dine_in' ? String(address || location || '').trim().slice(0, 160) : '',
       customer: String(customer || 'Guest').trim().slice(0, 40) || 'Guest',
       items: resolved,
@@ -560,7 +578,7 @@ export function buildApi({ storage }) {
     res.status(201).json(order)
   })
 
-  app.patch('/api/orders/:code/status', async (req, res) => {
+  app.patch('/api/orders/:code/status', requireOffice, async (req, res) => {
     await ensureLoaded()
     const order = ordersState.orders.find((o) => o.code.toLowerCase() === String(req.params.code).toLowerCase())
     if (!order) return res.status(404).json({ error: 'Order not found' })

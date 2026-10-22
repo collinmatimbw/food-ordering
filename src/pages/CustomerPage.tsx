@@ -38,6 +38,30 @@ const TABLE_KEY = 'savor.table'
 const HISTORY_KEY = 'savor.history'
 const KISINIA_CART_KEY = 'savor.kisinia'
 
+type HistoryEntry = { code: string; phone: string }
+
+function readHistory(): HistoryEntry[] {
+  try {
+    const raw = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
+    if (!Array.isArray(raw)) return []
+    return raw
+      .map((e) =>
+        typeof e === 'string'
+          ? { code: e, phone: '' }
+          : { code: String(e?.code || ''), phone: String(e?.phone || '') }
+      )
+      .filter((e) => e.code)
+  } catch {
+    return []
+  }
+}
+
+function writeHistory(entries: HistoryEntry[]) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(entries.slice(0, 20)))
+  } catch {}
+}
+
 export default function CustomerPage() {
   const [menu, setMenu] = useState<MenuResponse | null>(null)
   const [error, setError] = useState('')
@@ -109,16 +133,11 @@ export default function CustomerPage() {
     if (table) localStorage.setItem(TABLE_KEY, String(table))
   }, [table])
 
-  // Load order history
+  // Load order history (only orders that were placed with a phone number)
   useEffect(() => {
-    let codes: string[] = []
-    try {
-      codes = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
-    } catch {
-      codes = []
-    }
-    if (codes.length === 0) return
-    Promise.all(codes.map((c) => fetchOrder(c).catch(() => null)))
+    const entries = readHistory().filter((e) => e.phone)
+    if (entries.length === 0) return
+    Promise.all(entries.map((e) => fetchOrder(e.code, e.phone).catch(() => null)))
       .then((orders) => setHistory(orders.filter((o): o is Order => Boolean(o))))
       .catch(() => {})
   }, [])
@@ -144,8 +163,9 @@ export default function CustomerPage() {
     let mounted = true
     const tick = async () => {
       if (!activeOrder) return
+      if (!activeOrder.phone) return
       try {
-        const o = await fetchOrder(activeOrder.code)
+        const o = await fetchOrder(activeOrder.code, activeOrder.phone)
         if (mounted) setActiveOrder(o)
       } catch {}
     }
@@ -278,13 +298,14 @@ export default function CustomerPage() {
 
   const trackLookup = async () => {
     if (!trackCode.trim()) return toast('Enter your order code', 'error')
+    if (!trackPhone.trim()) return toast('Enter the phone number used for this order', 'error')
     setTracking(true)
     try {
       const order = await trackOrder(trackCode.trim(), trackPhone.trim())
       setActiveOrder(order)
       setHistoryOpen(false)
-      const codes = [order.code, ...history.map((h) => h.code)].slice(0, 20)
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(codes))
+      const entry = { code: order.code, phone: order.phone || trackPhone.trim() }
+      writeHistory([entry, ...readHistory().filter((h) => h.code !== order.code)])
       setHistory((prev) => [order, ...prev.filter((h) => h.code !== order.code)])
     } catch (e) {
       toast(e instanceof Error ? e.message : 'Order not found', 'error')
@@ -521,10 +542,21 @@ export default function CustomerPage() {
                 />
               </div>
             )}
-            {mode === 'dine_in' && !qrTable && (
-              <p className="mt-3 text-[12px] text-ink-500">
-                Choose your table number in the cart before checking out.
-              </p>
+            {mode === 'dine_in' && (
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  inputMode="tel"
+                  placeholder="Phone number (to track your order)"
+                  className="input"
+                />
+                {!qrTable && (
+                  <p className="flex items-center text-[12px] text-ink-500">
+                    Choose your table number in the cart before checking out.
+                  </p>
+                )}
+              </div>
             )}
           </div>
         </motion.section>
@@ -776,8 +808,7 @@ export default function CustomerPage() {
         decPlatter={decPlatter}
         clear={clear}
         onPlaced={(o) => {
-          const codes = [o.code, ...history.map((h) => h.code)].slice(0, 20)
-          localStorage.setItem(HISTORY_KEY, JSON.stringify(codes))
+          writeHistory([{ code: o.code, phone: o.phone || phone }, ...readHistory()])
           setHistory((prev) => [o, ...prev])
           setActiveOrder(o)
         }}
@@ -1008,7 +1039,8 @@ function CartSheet({
 
   async function submit() {
     if (mode === 'dine_in' && !table) return toast('Please select your table first', 'error')
-    if (mode !== 'dine_in' && !phone.trim()) return toast('Please enter your phone number', 'error')
+    if (phone.replace(/\D/g, '').length < 7)
+      return toast('Please enter your phone number — you need it to track this order', 'error')
     if (mode === 'delivery' && !address.trim())
       return toast('Please enter your delivery location', 'error')
     if (lines.length === 0 && kisLines.length === 0 && platterLines.length === 0)
@@ -1018,7 +1050,7 @@ function CartSheet({
       const order = await placeOrder({
         type: mode,
         table: mode === 'dine_in' ? table : null,
-        phone: mode === 'dine_in' ? undefined : phone.trim(),
+        phone: phone.trim(),
         address: mode === 'dine_in' ? undefined : address.trim(),
         customer: customer.trim() || 'Guest',
         items: [
@@ -1241,12 +1273,12 @@ function CartSheet({
           )}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
-            {mode === 'dine_in' ? 'Table number' : 'Phone number'}
-          </label>
-          {mode === 'dine_in' ? (
-            qrTable ? (
+        {mode === 'dine_in' && (
+          <div className="flex flex-col gap-2">
+            <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+              Table number
+            </label>
+            {qrTable ? (
               <div className="flex items-center gap-2 rounded-2xl border border-brand-200 bg-brand-50 px-3 py-3">
                 <Armchair className="h-4 w-4 text-brand-600" />
                 <span className="text-sm font-bold text-ink-900">Table {qrTable}</span>
@@ -1254,16 +1286,24 @@ function CartSheet({
               </div>
             ) : (
               <TablePicker tables={tables} value={table} onChange={setTable} />
-            )
-          ) : (
-            <input
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              inputMode="tel"
-              placeholder="e.g. 0712 345 678"
-              className="input"
-            />
-          )}
+            )}
+          </div>
+        )}
+
+        <div className="flex flex-col gap-2">
+          <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+            Phone number
+          </label>
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            inputMode="tel"
+            placeholder="e.g. 0712 345 678"
+            className="input"
+          />
+          <p className="text-[11.5px] text-ink-400">
+            You'll use this number with your order code to track the order.
+          </p>
         </div>
 
         {mode === 'delivery' && (

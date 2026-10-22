@@ -1,12 +1,13 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { fetchMenu, fetchOrders, updateOrderStatus } from '../api'
+import { fetchMenu, fetchOrders, getOfficeKey, setOfficeKey, updateOrderStatus } from '../api'
 import type { MenuResponse, Order, OrderStatus } from '../types'
 import { STATUS_META, StatusPill } from '../components/StatusPill'
 import { TableBadge, OrderSourceBadge } from '../components/TablePicker'
 import { toast, ToastHost } from '../components/Toasts'
 import MenuManager from '../components/MenuManager'
 import KisiniaManager from '../components/KisiniaManager'
+import OfficeLock from '../components/OfficeLock'
 import { getIcon } from '../icons'
 import { money } from '../utils'
 import {
@@ -42,6 +43,7 @@ import {
   VolumeX,
   Wallet,
   X,
+  Lock,
 } from 'lucide-react'
 import TableQrSheet from '../components/TableQrSheet'
 
@@ -98,6 +100,7 @@ function avatarTint(name: string) {
 
 export default function OfficePage() {
   const [orders, setOrders] = useState<Order[]>([])
+  const [unlocked, setUnlocked] = useState(() => Boolean(getOfficeKey()))
   const [currency, setCurrency] = useState('$')
   const [loading, setLoading] = useState(true)
   const [sound, setSound] = useState(true)
@@ -121,6 +124,7 @@ export default function OfficePage() {
   soundRef.current = sound
 
   useEffect(() => {
+    if (!unlocked) return
     Promise.all([fetchOrders(), fetchMenu()])
       .then(([o, m]) => {
         setOrders(o)
@@ -130,9 +134,10 @@ export default function OfficePage() {
       })
       .catch(() => toast('Failed to load orders', 'error'))
       .finally(() => setLoading(false))
-  }, [])
+  }, [unlocked])
 
   useEffect(() => {
+    if (!unlocked) return
     let mounted = true
     const tick = async () => {
       try {
@@ -175,7 +180,7 @@ export default function OfficePage() {
       mounted = false
       clearInterval(t)
     }
-  }, [])
+  }, [unlocked])
 
   useEffect(() => {
     let mounted = true
@@ -192,7 +197,7 @@ export default function OfficePage() {
       mounted = false
       clearInterval(t)
     }
-  }, [])
+  }, [unlocked])
 
   const [, force] = useState(0)
   useEffect(() => {
@@ -352,9 +357,15 @@ export default function OfficePage() {
       nav={navItems as any}
       sound={sound}
       onToggleSound={() => setSound((s) => !s)}
+      onLock={() => {
+        setOfficeKey('')
+        setUnlocked(false)
+      }}
       openCount={openCount}
     />
   )
+
+  if (!unlocked) return <OfficeLock onUnlock={() => setUnlocked(true)} />
 
   return (
     <div className="min-h-screen">
@@ -1330,6 +1341,7 @@ function SidebarContent({
   nav,
   sound,
   onToggleSound,
+  onLock,
   openCount,
 }: {
   view: ViewKey
@@ -1337,6 +1349,7 @@ function SidebarContent({
   nav: readonly { key: string; label: string; icon: any; count: number }[]
   sound: boolean
   onToggleSound: () => void
+  onLock: () => void
   openCount: number
 }) {
   return (
@@ -1429,6 +1442,18 @@ function SidebarContent({
               className={`h-3 w-3 rounded-full bg-white transition-transform ${sound ? 'translate-x-3' : ''}`}
             />
           </span>
+        </button>
+        <button
+          onClick={onLock}
+          className="flex items-center justify-between rounded-2xl px-3 py-2.5 text-xs text-white/60 transition hover:bg-white/[0.07] hover:text-white"
+        >
+          <span className="flex items-center gap-2.5">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-white/[0.08]">
+              <Lock className="h-4 w-4" />
+            </span>
+            <span className="font-medium">Lock office</span>
+          </span>
+          <ArrowRight className="h-3.5 w-3.5" />
         </button>
         <a
           href="#/"
