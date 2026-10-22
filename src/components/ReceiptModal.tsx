@@ -48,10 +48,10 @@ export default function ReceiptModal({
             <div className="print-area rounded-lg bg-white p-6 font-mono text-[12px] text-ink-900 shadow-sheet">
               <div className="border-b border-dashed border-slate-300 pb-3 text-center">
                 <p className="font-display text-lg font-extrabold tracking-tight">
-                  FOOD POINT
+                  WILLIS LOUNGE
                 </p>
                 <p className="text-[11px] text-ink-500">
-                  Mikocheni B, Dar es Salaam
+                  Sinza Mapambano, Dar es Salaam
                 </p>
                 <p className="text-[11px] text-ink-500">TIN 118-442-901 · +255 754 000 111</p>
               </div>

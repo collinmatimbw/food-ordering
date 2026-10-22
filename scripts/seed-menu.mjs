@@ -32,8 +32,8 @@ const P = {
 
 const data = {
   restaurant: {
-    name: 'Mama Kilanga',
-    tagline: 'Authentic Tanzanian kitchen · Mikocheni B, Dar es Salaam',
+    name: 'Willis Lounge',
+    tagline: 'Bar & Grill · Sinza Mapambano, Dar es Salaam',
     currency: 'TSh',
     tables: 24,
   },

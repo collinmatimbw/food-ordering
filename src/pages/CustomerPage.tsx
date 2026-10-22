@@ -431,7 +431,7 @@ export default function CustomerPage() {
                     <Clock className="h-3.5 w-3.5" /> 15–25 min
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <MapPin className="h-3.5 w-3.5" /> Mikocheni B
+                    <MapPin className="h-3.5 w-3.5" /> Sinza Mapambano
                   </span>
                 </div>
               </div>
@@ -492,7 +492,7 @@ export default function CustomerPage() {
                 <input
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Delivery location (e.g. Mikocheni B, Street 4)"
+                  placeholder="Delivery location (e.g. Sinza Mapambano, Street 4)"
                   className="input"
                 />
                 <input
@@ -1275,7 +1275,7 @@ function CartSheet({
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               rows={2}
-              placeholder="e.g. Mikocheni B, Street 4, House No. 12"
+              placeholder="e.g. Sinza Mapambano, Street 4, House No. 12"
               className="input resize-none"
             />
           </div>
