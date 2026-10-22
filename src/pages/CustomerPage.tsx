@@ -14,9 +14,11 @@ import {
   SearchX,
   UtensilsCrossed,
   ArrowRight,
+  Armchair,
+  Bike,
 } from 'lucide-react'
-import { fetchMenu, fetchOrder, placeOrder } from '../api'
-import type { MenuResponse, Order, KisiniaCartLine, KisiniaConfig, MenuItem } from '../types'
+import { fetchMenu, fetchOrder, placeOrder, trackOrder } from '../api'
+import type { MenuResponse, Order, KisiniaCartLine, KisiniaConfig, MenuItem, OrderType } from '../types'
 import { getIcon } from '../icons'
 import { money } from '../utils'
 import { quoteKisinia, kisiniaKey, KISINIA_ID, picksSummary } from '../kisinia'
@@ -61,7 +63,24 @@ export default function CustomerPage() {
   const [platterOpen, setPlatterOpen] = useState(false)
   const [activePlatter, setActivePlatter] = useState<MenuItem | null>(null)
   const [kisOpen, setKisOpen] = useState(false)
+  const [mode, setMode] = useState<OrderType>(() => {
+    const t = new URLSearchParams(window.location.search).get('mode')
+    if (t === 'delivery' || t === 'takeaway' || t === 'dine_in') return t
+    const q = new URLSearchParams(window.location.search).get('table')
+    if (q) return 'dine_in'
+    return 'delivery'
+  })
+  const [qrTable] = useState<number | null>(() => {
+    const q = new URLSearchParams(window.location.search).get('table')
+    const n = Number(q)
+    return q && Number.isFinite(n) && n > 0 ? n : null
+  })
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
   const [table, setTable] = useState<number | null>(() => {
+    const q = new URLSearchParams(window.location.search).get('table')
+    const n = Number(q)
+    if (q && Number.isFinite(n) && n > 0) return n
     const t = Number(localStorage.getItem(TABLE_KEY))
     return Number.isFinite(t) && t > 0 ? t : null
   })
@@ -70,6 +89,9 @@ export default function CustomerPage() {
   const [activeOrder, setActiveOrder] = useState<Order | null>(null)
   const [history, setHistory] = useState<Order[]>([])
   const [receipt, setReceipt] = useState<Order | null>(null)
+  const [trackCode, setTrackCode] = useState('')
+  const [trackPhone, setTrackPhone] = useState('')
+  const [tracking, setTracking] = useState(false)
 
   useEffect(() => {
     fetchMenu().then(setMenu).catch((e) => setError(e.message))
@@ -254,6 +276,23 @@ export default function CustomerPage() {
     setPlatterCart({})
   }
 
+  const trackLookup = async () => {
+    if (!trackCode.trim()) return toast('Enter your order code', 'error')
+    setTracking(true)
+    try {
+      const order = await trackOrder(trackCode.trim(), trackPhone.trim())
+      setActiveOrder(order)
+      setHistoryOpen(false)
+      const codes = [order.code, ...history.map((h) => h.code)].slice(0, 20)
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(codes))
+      setHistory((prev) => [order, ...prev.filter((h) => h.code !== order.code)])
+    } catch (e) {
+      toast(e instanceof Error ? e.message : 'Order not found', 'error')
+    } finally {
+      setTracking(false)
+    }
+  }
+
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center p-6">
@@ -399,6 +438,96 @@ export default function CustomerPage() {
             </div>
           </motion.section>
         )}
+
+        {/* ============ ORDER MODE ============ */}
+        <motion.section
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35 }}
+          className="mt-4"
+        >
+          <div className="card p-4 shadow-card">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="min-w-0">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+                  How would you like it?
+                </p>
+                <p className="mt-0.5 truncate text-[13px] font-semibold text-ink-700">
+                  {mode === 'dine_in'
+                    ? qrTable
+                      ? `Table ${qrTable} — scanned from your table`
+                      : 'Order for your table at the lounge'
+                    : mode === 'delivery'
+                      ? 'Delivered to your location'
+                      : 'Pick up from the lounge'}
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {(
+                  [
+                    { key: 'dine_in', label: 'Dine in', Icon: Armchair },
+                    { key: 'delivery', label: 'Delivery', Icon: Bike },
+                    { key: 'takeaway', label: 'Takeaway', Icon: ShoppingBag },
+                  ] as const
+                ).map(({ key, label, Icon }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setMode(key)}
+                    className={`flex items-center gap-1.5 rounded-xl border px-2.5 py-2 text-[12px] font-bold transition sm:px-3 ${
+                      mode === key
+                        ? 'border-brand-500 bg-brand-50 text-brand-700'
+                        : 'border-slate-200 bg-white text-ink-500 hover:border-slate-300'
+                    }`}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {mode === 'delivery' && (
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <input
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Delivery location (e.g. Mikocheni B, Street 4)"
+                  className="input"
+                />
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  inputMode="tel"
+                  placeholder="Phone number"
+                  className="input"
+                />
+              </div>
+            )}
+            {mode === 'takeaway' && (
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <input
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Pickup note (optional)"
+                  className="input"
+                />
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  inputMode="tel"
+                  placeholder="Phone number"
+                  className="input"
+                />
+              </div>
+            )}
+            {mode === 'dine_in' && !qrTable && (
+              <p className="mt-3 text-[12px] text-ink-500">
+                Choose your table number in the cart before checking out.
+              </p>
+            )}
+          </div>
+        </motion.section>
 
         {/* ============ KISINIA ENTRY ============ */}
         {false && menu?.kisinia?.enabled && (
@@ -632,6 +761,13 @@ export default function CustomerPage() {
         tables={tables}
         table={table}
         setTable={setTable}
+        mode={mode}
+        setMode={setMode}
+        phone={phone}
+        setPhone={setPhone}
+        address={address}
+        setAddress={setAddress}
+        qrTable={qrTable}
         inc={inc}
         dec={dec}
         incKis={incKis}
@@ -649,44 +785,78 @@ export default function CustomerPage() {
 
       {/* ============ HISTORY SHEET ============ */}
       <Sheet open={historyOpen} onClose={() => setHistoryOpen(false)} title="My orders">
-        {history.length === 0 ? (
-          <EmptyState>
-            No orders yet. Your past and current orders will appear here.
-          </EmptyState>
-        ) : (
-          <div className="flex flex-col gap-3 p-5">
-            {history.map((o) => (
-              <button
-                key={o.code}
-                onClick={() => {
-                  setActiveOrder(o)
-                  setHistoryOpen(false)
-                }}
-                className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition hover:border-brand-300 hover:shadow-card"
-              >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                  <Receipt className="h-5 w-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="font-display text-sm font-extrabold text-ink-900">{o.code}</p>
-                  <p className="text-[12px] text-ink-500">
-                    Table {o.table} Â· {o.items.length} items Â·{' '}
-                    {new Date(o.createdAt).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: 'short',
-                    })}
-                  </p>
-                </div>
-                <span className="font-display text-sm font-extrabold text-brand-600">
-                  {money(currency, o.total)}
-                </span>
-              </button>
-            ))}
-            <button onClick={() => setHistoryOpen(false)} className="btn-ghost mt-2 w-full">
-              Close
+        <div className="flex flex-col gap-4 p-5">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+              Track an order
+            </p>
+            <p className="mt-1 text-[12px] text-ink-500">
+              Enter the code you received (e.g. SV-1A2B-004) and the phone number you used.
+            </p>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+              <input
+                value={trackCode}
+                onChange={(e) => setTrackCode(e.target.value)}
+                placeholder="Order code"
+                className="input flex-1"
+              />
+              <input
+                value={trackPhone}
+                onChange={(e) => setTrackPhone(e.target.value)}
+                inputMode="tel"
+                placeholder="Phone number"
+                className="input flex-1"
+              />
+            </div>
+            <button
+              onClick={trackLookup}
+              disabled={tracking}
+              className="btn-primary mt-2 w-full disabled:opacity-60"
+            >
+              {tracking ? 'Looking up…' : 'Track order'}
             </button>
           </div>
-        )}
+
+          {history.length === 0 ? (
+            <EmptyState>
+              No orders yet. Your past and current orders will appear here.
+            </EmptyState>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {history.map((o) => (
+                <button
+                  key={o.code}
+                  onClick={() => {
+                    setActiveOrder(o)
+                    setHistoryOpen(false)
+                  }}
+                  className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 text-left shadow-sm transition hover:border-brand-300 hover:shadow-card"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                    <Receipt className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-display text-sm font-extrabold text-ink-900">{o.code}</p>
+                    <p className="text-[12px] text-ink-500">
+                      {o.table ? `Table ${o.table}` : o.type === 'delivery' ? 'Delivery' : 'Takeaway'} ·{' '}
+                      {o.items.length} items ·{' '}
+                      {new Date(o.createdAt).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                      })}
+                    </p>
+                  </div>
+                  <span className="font-display text-sm font-extrabold text-brand-600">
+                    {money(currency, o.total)}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+          <button onClick={() => setHistoryOpen(false)} className="btn-ghost w-full">
+            Close
+          </button>
+        </div>
       </Sheet>
 
       {/* ============ RECEIPT ============ */}
@@ -733,6 +903,13 @@ function CartSheet({
   tables,
   table,
   setTable,
+  mode,
+  setMode,
+  phone,
+  setPhone,
+  address,
+  setAddress,
+  qrTable,
   inc,
   dec,
   incKis,
@@ -752,6 +929,13 @@ function CartSheet({
   tables: number
   table: number | null
   setTable: (n: number) => void
+  mode: OrderType
+  setMode: (m: OrderType) => void
+  phone: string
+  setPhone: (v: string) => void
+  address: string
+  setAddress: (v: string) => void
+  qrTable?: number | null
   inc: (id: string) => void
   dec: (id: string) => void
   incKis: (key: string) => void
@@ -823,13 +1007,19 @@ function CartSheet({
   const total = subtotal + service
 
   async function submit() {
-    if (!table) return toast('Please select your table first', 'error')
+    if (mode === 'dine_in' && !table) return toast('Please select your table first', 'error')
+    if (mode !== 'dine_in' && !phone.trim()) return toast('Please enter your phone number', 'error')
+    if (mode === 'delivery' && !address.trim())
+      return toast('Please enter your delivery location', 'error')
     if (lines.length === 0 && kisLines.length === 0 && platterLines.length === 0)
       return toast('Your cart is empty', 'error')
     setBusy(true)
     try {
       const order = await placeOrder({
-        table,
+        type: mode,
+        table: mode === 'dine_in' ? table : null,
+        phone: mode === 'dine_in' ? undefined : phone.trim(),
+        address: mode === 'dine_in' ? undefined : address.trim(),
         customer: customer.trim() || 'Guest',
         items: [
           ...lines.map((l) => ({
@@ -1019,10 +1209,91 @@ function CartSheet({
 
         <div className="flex flex-col gap-2">
           <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
-            Table number
+            How would you like it?
           </label>
-          <TablePicker tables={tables} value={table} onChange={setTable} />
+          <div className="grid grid-cols-3 gap-2">
+            {(
+              [
+                { key: 'dine_in', label: 'Dine in', Icon: Armchair },
+                { key: 'delivery', label: 'Delivery', Icon: Bike },
+                { key: 'takeaway', label: 'Takeaway', Icon: ShoppingBag },
+              ] as const
+            ).map(({ key, label, Icon }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setMode(key)}
+                className={`flex flex-col items-center gap-1 rounded-2xl border px-2 py-3 text-[12px] font-bold transition ${
+                  mode === key
+                    ? 'border-brand-500 bg-brand-50 text-brand-700'
+                    : 'border-slate-200 bg-white text-ink-500 hover:border-slate-300'
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </button>
+            ))}
+          </div>
+          {qrTable && mode === 'dine_in' && (
+            <p className="text-[11.5px] text-ink-500">
+              Scanned from your table QR — ordering for table {qrTable}.
+            </p>
+          )}
         </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+            {mode === 'dine_in' ? 'Table number' : 'Phone number'}
+          </label>
+          {mode === 'dine_in' ? (
+            qrTable ? (
+              <div className="flex items-center gap-2 rounded-2xl border border-brand-200 bg-brand-50 px-3 py-3">
+                <Armchair className="h-4 w-4 text-brand-600" />
+                <span className="text-sm font-bold text-ink-900">Table {qrTable}</span>
+                <span className="text-[11.5px] text-ink-500">(from your table QR code)</span>
+              </div>
+            ) : (
+              <TablePicker tables={tables} value={table} onChange={setTable} />
+            )
+          ) : (
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              inputMode="tel"
+              placeholder="e.g. 0712 345 678"
+              className="input"
+            />
+          )}
+        </div>
+
+        {mode === 'delivery' && (
+          <div className="flex flex-col gap-2">
+            <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+              Delivery location
+            </label>
+            <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              rows={2}
+              placeholder="e.g. Mikocheni B, Street 4, House No. 12"
+              className="input resize-none"
+            />
+          </div>
+        )}
+
+        {mode === 'takeaway' && (
+          <div className="flex flex-col gap-2">
+            <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
+              Pickup note (optional)
+            </label>
+            <input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="e.g. Collecting at 8pm"
+              className="input"
+            />
+          </div>
+        )}
 
         <div className="flex flex-col gap-2">
           <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">

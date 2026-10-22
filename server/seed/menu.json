@@ -1,12 +1,12 @@
 {
   "restaurant": {
-    "name": "Willis Lounge",
-    "tagline": "Bar & grill · Morogoro, Dar es Salaam",
+    "name": "WILLIS LOUNGE BAR & GRILL",
+    "tagline": "Bar & Grill � Morogoro, Dar es Salaam",
     "currency": "TSh",
     "tables": 24
   },
   "kisinia": {
-    "enabled": true,
+    "enabled": false,
     "title": "Kisinia Platter",
     "blurb": "One big shared plate - chips, wali, nyama, matunda and more. Pick your size, load it up.",
     "sizes": [
@@ -121,551 +121,380 @@
   },
   "categories": [
     {
-      "id": "staples",
-      "name": "Wali & Ugali",
-      "icon": "Wheat"
-    },
-    {
-      "id": "grill",
-      "name": "Nyama Choma",
-      "icon": "Flame"
-    },
-    {
-      "id": "street",
-      "name": "Street Food",
+      "id": "wl-platters",
+      "name": "Platters",
       "icon": "UtensilsCrossed"
     },
     {
-      "id": "sides",
-      "name": "Sides & Salads",
+      "id": "wl-fish",
+      "name": "Fish",
+      "icon": "Fish"
+    },
+    {
+      "id": "wl-bbq",
+      "name": "BBQ & Chicken",
+      "icon": "Flame"
+    },
+    {
+      "id": "wl-sides",
+      "name": "Sides",
       "icon": "Salad"
-    },
-    {
-      "id": "desserts",
-      "name": "Vitumbua & More",
-      "icon": "Cake"
-    },
-    {
-      "id": "drinks",
-      "name": "Vinywaji",
-      "icon": "Coffee"
     }
   ],
   "items": [
     {
-      "id": "st-01",
-      "name": "Nyama ya Ng'ombe na salad",
-      "description": "best combo of nyama choma and salad it comes with chips kavu",
-      "price": 18000,
-      "icon": "Beef",
-      "image": "/uploads/photo-1504674900247-0877df9cc836.jpg",
-      "category": "grill",
-      "tags": [
-        "Signature",
-        "Swahili"
-      ],
-      "rating": 4.8,
-      "prepMinutes": 18,
-      "gradient": "from-sky-400 to-blue-600",
-      "available": true
-    },
-    {
-      "id": "st-02",
-      "name": "Tambi ya Nyama",
-      "description": "Fragrant spiced pilau rice slow-cooked with tender beef and pilau masala.",
-      "price": 3000,
-      "icon": "Utensils",
-      "image": "/uploads/photo-1585032226651-759b368d7246.jpg",
-      "category": "staples",
-      "tags": [
-        "Popular",
-        "Spicy"
-      ],
-      "rating": 4.7,
-      "prepMinutes": 20,
-      "gradient": "from-amber-400 to-orange-600",
-      "available": true
-    },
-    {
-      "id": "st-03",
-      "name": "chips na kuku",
-      "description": "Creamy chicken curry served with steamed basmati rice and kachumbari.",
-      "price": 11000,
-      "icon": "Drumstick",
-      "image": "/uploads/photo-1626074353765-517a681e40be.jpg",
-      "category": "grill",
-      "tags": [
-        "Popular"
-      ],
-      "rating": 4.6,
-      "prepMinutes": 16,
-      "gradient": "from-orange-400 to-rose-600",
-      "available": true
-    },
-    {
-      "id": "st-04",
-      "name": "Ugali na Mchuzi wa Maharage",
-      "description": "Soft maize porridge with slow-simmered beans in coconut gravy.",
-      "price": 2000,
-      "icon": "Wheat",
-      "image": "/uploads/dish-1792574707232-b4d9135d.jpg",
-      "category": "staples",
-      "tags": [
-        "Budget",
-        "Vegan"
-      ],
-      "rating": 4.5,
-      "prepMinutes": 10,
-      "gradient": "from-amber-300 to-yellow-600",
-      "available": true
-    },
-    {
-      "id": "st-05",
-      "name": "Fruity salaad",
-      "description": "parachichi ,watermeloon ,embe and kachumbari",
-      "price": 7000,
-      "icon": "Leaf",
-      "image": "/uploads/photo-1512621776951-a57141f2eefd.jpg",
-      "category": "sides",
-      "tags": [
-        "Vegan"
-      ],
-      "rating": 4.4,
-      "prepMinutes": 12,
-      "gradient": "from-emerald-400 to-teal-600",
-      "available": true
-    },
-    {
-      "id": "st-06",
-      "name": "salaad and eggs",
-      "description": "Coconut bean stew with maize, a coastal comfort classic.",
-      "price": 7500,
-      "icon": "Soup",
-      "image": "/uploads/photo-1490645935967-10de6ba17061.jpg",
-      "category": "sides",
-      "tags": [
-        "Coastal"
-      ],
-      "rating": 4.5,
-      "prepMinutes": 15,
-      "gradient": "from-lime-400 to-emerald-700",
-      "available": true
-    },
-    {
-      "id": "gr-01",
-      "name": "Nyama Choma ya Mbuzi",
-      "description": "Charcoal-grilled goat meat with kachumbari, na chuma ya pili pili.",
-      "price": 18000,
-      "icon": "Beef",
-      "image": "/uploads/photo-1544025162-d76694265947.jpg",
-      "category": "grill",
-      "tags": [
-        "Signature",
-        "Grill"
-      ],
-      "rating": 4.9,
-      "prepMinutes": 25,
-      "gradient": "from-rose-400 to-red-600",
-      "available": true
-    },
-    {
-      "id": "gr-02",
-      "name": "Mishkaki ya Nyama",
-      "description": "Marinated beef skewers grilled over open coals. Served with chips or ugali.",
-      "price": 13000,
-      "icon": "Flame",
-      "image": "/uploads/photo-1432139555190-58524dae6a55.jpg",
-      "category": "grill",
-      "tags": [
-        "Popular",
-        "Grill"
-      ],
-      "rating": 4.8,
-      "prepMinutes": 18,
-      "gradient": "from-orange-400 to-red-600",
-      "available": true
-    },
-    {
-      "id": "gr-03",
-      "name": "kuku mzima",
-      "description": "whole chicken charcoal-grilled with African spices, rice and kachumbari.",
-      "price": 15000,
-      "icon": "Drumstick",
-      "image": "/uploads/dish-1792496603363-cea28b71.jpg",
-      "category": "grill",
-      "tags": [
-        "Grill"
-      ],
-      "rating": 4.7,
-      "prepMinutes": 22,
-      "gradient": "from-amber-400 to-orange-700",
-      "available": true
-    },
-    {
-      "id": "gr-04",
-      "name": "Samaki wa Kuchoma",
-      "description": "Grilled tilapia stuffed with herbs, lemon and peri-peri butter.",
-      "price": 16000,
-      "icon": "Fish",
-      "image": "/uploads/dish-1792496670860-ffef21f6.jpg",
-      "category": "grill",
-      "tags": [
-        "Coastal",
-        "Grill"
-      ],
-      "rating": 4.6,
-      "prepMinutes": 24,
-      "gradient": "from-sky-400 to-cyan-700",
-      "available": true
-    },
-    {
-      "id": "stf-01",
-      "name": "Humberger",
-      "description": "Crispy fries folded into a golden egg omelette. A Dar street legend.",
-      "price": 4000,
+      "id": "it-b8696d",
+      "name": "Platter 1",
+      "description": "Drumstick/Wings 3 pcs, Mbuzi 1 portion, T-Bone 1 portion. 1 side.",
+      "price": 30000,
+      "category": "wl-platters",
       "icon": "UtensilsCrossed",
-      "image": "/uploads/photo-1551782450-a2132b4ba21d.jpg",
-      "category": "street",
-      "tags": [
-        "Street",
-        "Popular"
-      ],
-      "rating": 4.7,
-      "prepMinutes": 10,
-      "gradient": "from-yellow-400 to-amber-600",
-      "available": true
-    },
-    {
-      "id": "stf-02",
-      "name": "Sambusa ya Nyama (4 pcs)",
-      "description": "Golden pastry parcels spiced with beef, onion and cumin. Fried to order.",
-      "price": 3000,
-      "icon": "Utensils",
-      "image": "/uploads/photo-1484723091739-30a097e8f929.jpg",
-      "category": "street",
-      "tags": [
-        "Snack"
-      ],
-      "rating": 4.5,
-      "prepMinutes": 8,
-      "gradient": "from-amber-300 to-orange-500",
-      "available": true
-    },
-    {
-      "id": "stf-03",
-      "name": "Muhogo wa Kupaka",
-      "description": "Boiled cassava tossed in a smoky coconut-peanut sauce.",
-      "price": 3500,
-      "icon": "Leaf",
-      "image": "/uploads/dish-1792495909514-3edd0156.jpg",
-      "category": "street",
-      "tags": [
-        "Vegan",
-        "Coastal"
-      ],
-      "rating": 4.4,
-      "prepMinutes": 12,
-      "gradient": "from-lime-400 to-emerald-600",
-      "available": true
-    },
-    {
-      "id": "stf-04",
-      "name": "Vitumbua",
-      "description": "Fluffy coconut rice-flour doughnuts, pan-fried and dusted with sugar.",
-      "price": 2000,
-      "icon": "Cookie",
-      "image": "/uploads/photo-1567620905732-2d1ec7ab7445.jpg",
-      "category": "street",
-      "tags": [
-        "Sweet",
-        "Snack"
-      ],
-      "rating": 4.6,
-      "prepMinutes": 10,
-      "gradient": "from-orange-300 to-rose-500",
-      "available": true
-    },
-    {
-      "id": "stf-05",
-      "name": "Viazi vya Karanga",
-      "description": "Twice-fried sweet potatoes with a rich peanut and tomato relish.",
-      "price": 3000,
-      "icon": "Salad",
-      "image": "/uploads/photo-1498837167922-ddd27525d352.jpg",
-      "category": "street",
-      "tags": [
-        "Vegan"
-      ],
-      "rating": 4.3,
-      "prepMinutes": 12,
-      "gradient": "from-amber-400 to-yellow-700",
-      "available": true
-    },
-    {
-      "id": "sd-01",
-      "name": "Kachumbari",
-      "description": "Fresh tomato, red onion, coriander and chilli with a squeeze of lime.",
-      "price": 2000,
-      "icon": "Salad",
-      "image": "/uploads/photo-1540189549336-e6e99c3679fe.jpg",
-      "category": "sides",
-      "tags": [
-        "Fresh",
-        "Vegan"
-      ],
-      "rating": 4.6,
-      "prepMinutes": 5,
-      "gradient": "from-rose-300 to-red-500",
-      "available": true
-    },
-    {
-      "id": "sd-02",
-      "name": "Mchicha",
-      "description": "Sautéed amaranth greens with onion, tomato and a hint of peanut.",
-      "price": 3000,
-      "icon": "Leaf",
-      "image": "/uploads/photo-1482049016688-2d3e1b311543.jpg",
-      "category": "sides",
-      "tags": [
-        "Vegan",
-        "Greens"
-      ],
-      "rating": 4.4,
-      "prepMinutes": 8,
-      "gradient": "from-green-400 to-emerald-700",
-      "available": true
-    },
-    {
-      "id": "sd-03",
-      "name": "Mkate na mayai",
-      "description": "morning breakfast",
-      "price": 3500,
-      "icon": "Utensils",
-      "image": "/uploads/photo-1533089860892-a7c6f0a88666.jpg",
-      "category": "sides",
-      "tags": [
-        "Crispy"
-      ],
-      "rating": 4.5,
-      "prepMinutes": 9,
-      "gradient": "from-yellow-400 to-amber-600",
-      "available": true
-    },
-    {
-      "id": "sd-04",
-      "name": "Supu ya Mbuzi",
-      "description": "Slow-simmered goat broth with ginger, mchuzi spices and fresh herbs.",
-      "price": 4500,
-      "icon": "Soup",
-      "image": "/uploads/photo-1493770348161-369560ae357d.jpg",
-      "category": "sides",
-      "tags": [
-        "Warming"
-      ],
-      "rating": 4.5,
-      "prepMinutes": 15,
-      "gradient": "from-stone-300 to-amber-600",
-      "available": true
-    },
-    {
-      "id": "ds-01",
-      "name": "cake",
-      "description": "Crunchy coconut and peanut brittle — a Zanzibar favourite.",
-      "price": 1500,
-      "icon": "Cookie",
-      "image": "/uploads/photo-1578985545062-69928b1d9587.jpg",
-      "category": "desserts",
-      "tags": [
-        "Sweet",
-        "Coastal"
-      ],
-      "rating": 4.7,
-      "prepMinutes": 5,
-      "gradient": "from-orange-300 to-amber-600",
-      "available": true
-    },
-    {
-      "id": "ds-02",
-      "name": "Matunda ya Moto",
-      "description": "Seasonal tropical fruit plate with lime and a dusting of chilli salt.",
-      "price": 4000,
-      "icon": "Salad",
-      "image": "/uploads/photo-1546069901-ba9599a7e63c.jpg",
-      "category": "desserts",
-      "tags": [
-        "Fresh",
-        "Vegan"
-      ],
-      "rating": 4.6,
-      "prepMinutes": 6,
-      "gradient": "from-pink-300 to-rose-500",
-      "available": true
-    },
-    {
-      "id": "ds-03",
-      "name": "Tiramisu ya Tangawizi",
-      "description": "Our ginger-spiced twist on the Italian classic. Light and creamy.",
-      "price": 8000,
-      "icon": "Cake",
-      "image": "/uploads/photo-1559847844-5315695dadae.jpg",
-      "category": "desserts",
-      "tags": [
-        "Chef pick"
-      ],
-      "rating": 4.8,
-      "prepMinutes": 8,
+      "image": "",
+      "tags": [],
       "gradient": "from-amber-400 to-orange-600",
-      "available": true
+      "available": true,
+      "sidesIncluded": 1
     },
     {
-      "id": "dr-01",
-      "name": "Kahawa ya Kijiko",
-      "description": "Strong Tanzanian coffee, served black or with a splash of milk.",
-      "price": 500,
-      "icon": "Coffee",
-      "image": "/uploads/dish-1792528366062-2b69fafb.jpg",
-      "category": "drinks",
-      "tags": [
-        "Hot"
-      ],
-      "rating": 4.7,
-      "prepMinutes": 5,
-      "gradient": "from-amber-600 to-stone-800",
-      "available": true
+      "id": "it-9d7db4",
+      "name": "Platter 2",
+      "description": "Ribs 1 portion, King Fish 1 portion, Drumstick/Wings 3 pcs, Sausage 2 pcs. 2 sides.",
+      "price": 40000,
+      "category": "wl-platters",
+      "icon": "UtensilsCrossed",
+      "image": "",
+      "tags": [],
+      "gradient": "from-emerald-500 to-teal-700",
+      "available": true,
+      "sidesIncluded": 2
     },
     {
-      "id": "dr-02",
-      "name": "Jus ya Ndimi na Maembe",
-      "description": "Creamy avocado and mango juice, blended fresh to order.",
-      "price": 1000,
-      "icon": "GlassWater",
-      "image": "/uploads/dish-1792495495070-a32801e7.jpg",
-      "category": "drinks",
-      "tags": [
-        "Fresh",
-        "Popular"
-      ],
-      "rating": 4.8,
-      "prepMinutes": 6,
-      "gradient": "from-lime-400 to-emerald-600",
-      "available": true
-    },
-    {
-      "id": "dr-03",
-      "name": "Chai ya Tangawizi",
-      "description": "Spiced ginger tea with milk and a whisper of lemongrass.",
-      "price": 500,
-      "icon": "Milk",
-      "image": "/uploads/dish-1792495546814-ba1fe25a.jpg",
-      "category": "drinks",
-      "tags": [
-        "Warming"
-      ],
-      "rating": 4.5,
-      "prepMinutes": 6,
-      "gradient": "from-orange-300 to-amber-500",
-      "available": true
-    },
-    {
-      "id": "dr-04",
-      "name": "maji madogo",
-      "description": "cold or warm water all available.",
-      "price": 1500,
-      "icon": "Beer",
-      "image": "/uploads/dish-1792495728896-3c45953a.jpg",
-      "category": "drinks",
-      "tags": [
-        "Cold"
-      ],
-      "rating": 4.6,
-      "prepMinutes": 2,
-      "gradient": "from-amber-400 to-orange-500",
-      "available": true
-    },
-    {
-      "id": "it-b24cd4",
-      "name": "Supu na chapati",
-      "description": "supu ya mbuzi na chapati 2",
-      "price": 5000,
-      "category": "desserts",
-      "icon": "Soup",
-      "image": "/uploads/dish-1792495349951-05e5e441.jpg",
+      "id": "it-70d657",
+      "name": "Platter 3",
+      "description": "Calamari 1 portion, Prawns 1 portion, King Fish 1 portion, Whole Fish 1 pc. 2 sides.",
+      "price": 70000,
+      "category": "wl-platters",
+      "icon": "UtensilsCrossed",
+      "image": "",
       "tags": [],
       "gradient": "from-emerald-400 to-teal-600",
-      "available": true
+      "available": true,
+      "sidesIncluded": 2
     },
     {
-      "id": "it-670f23",
-      "name": "Biriyani",
-      "description": "eggs,rice,goat meat and a sauce",
-      "price": 9000,
-      "category": "staples",
-      "icon": "Utensils",
-      "image": "/uploads/dish-1792574770009-0097f4f1.jpg",
+      "id": "it-02a122",
+      "name": "Platter 4",
+      "description": "Ribs 1 portion, Mbuzi 1 portion, T-Bone 1 portion, Sausage 3 pcs. 2 sides.",
+      "price": 70000,
+      "category": "wl-platters",
+      "icon": "UtensilsCrossed",
+      "image": "",
       "tags": [],
       "gradient": "from-brand-400 to-brand-700",
-      "available": true
+      "available": true,
+      "sidesIncluded": 2
     },
     {
-      "id": "it-a1270c",
-      "name": "pilau na nyama",
-      "description": "pilau ,kachumbari na nyama ya mbuzi",
-      "price": 4000,
-      "category": "staples",
-      "icon": "Utensils",
-      "image": "/uploads/dish-1792527814460-e63f280d.jpg",
+      "id": "it-ef87cb",
+      "name": "Platter 5",
+      "description": "Whole Fish 1 portion, Octopus 1 portion, Prawns 1 portion, Sausage 3 pcs, Ribs 1 portion, Mbuzi 1 portion. 3 sides.",
+      "price": 100000,
+      "category": "wl-platters",
+      "icon": "UtensilsCrossed",
+      "image": "",
       "tags": [],
       "gradient": "from-yellow-300 to-amber-600",
-      "available": true
+      "available": true,
+      "sidesIncluded": 3
     },
     {
-      "id": "it-b1e8f1",
-      "name": "wali na maharage",
-      "description": "wali na matunda na maharage",
-      "price": 3000,
-      "category": "staples",
-      "icon": "Utensils",
-      "image": "/uploads/dish-1792496412149-b128189d.jpg",
+      "id": "it-d8634f",
+      "name": "Platter 6",
+      "description": "Fillet Tiles, Drumstick/Wings 3 pcs, Sausages 6 pcs, King Fish 2 pcs, Calamari 1 portion. 3 sides.",
+      "price": 130000,
+      "category": "wl-platters",
+      "icon": "UtensilsCrossed",
+      "image": "",
       "tags": [],
       "gradient": "from-lime-400 to-emerald-700",
-      "available": true
+      "available": true,
+      "sidesIncluded": 3
     },
     {
-      "id": "it-75747a",
-      "name": "wali na nyama",
-      "description": "wali na nyama na mayai ya kuchemsha",
-      "price": 5000,
-      "category": "staples",
-      "icon": "Utensils",
-      "image": "/uploads/dish-1792528918857-34043c9b.jpg",
+      "id": "it-c3b6aa",
+      "name": "Platter 7",
+      "description": "T-Bone, Mbuzi, Whole Fish, Octopus, King Fish 2 pcs, Sausage 3 pcs, Wings 3 pcs, Ribs, Fillet and Nundu 3 pcs, Mush/Wages free. 3 sides.",
+      "price": 160000,
+      "category": "wl-platters",
+      "icon": "UtensilsCrossed",
+      "image": "",
       "tags": [],
       "gradient": "from-sky-400 to-blue-700",
-      "available": true
+      "available": true,
+      "sidesIncluded": 3
     },
     {
-      "id": "it-78f4f6",
-      "name": "Supu ya samaki",
-      "description": "supu nzuri yenye samaki na ndizi",
-      "price": 4000,
-      "category": "grill",
-      "icon": "Utensils",
-      "image": "/uploads/dish-1792496692827-8b963ff9.jpg",
+      "id": "it-163b28",
+      "name": "King Fish",
+      "description": "Grilled king fish.",
+      "price": 20000,
+      "category": "wl-fish",
+      "icon": "Fish",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672389401-45fe3b9b.jpg",
       "tags": [],
       "gradient": "from-brand-500 to-brand-800",
       "available": true
     },
     {
-      "id": "it-54e0d9",
-      "name": "TestPic",
-      "description": "x",
-      "price": 1000,
-      "category": "drinks",
-      "icon": "x",
-      "image": "/uploads/dish-1792526567304-61815104.gif",
-      "tags": [
-        "test"
-      ],
+      "id": "it-5e44bd",
+      "name": "Kolekole",
+      "description": "Grilled kolekole.",
+      "price": 20000,
+      "category": "wl-fish",
+      "icon": "Fish",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672482452-206e9a46.jpg",
+      "tags": [],
       "gradient": "from-amber-400 to-orange-600",
+      "available": true
+    },
+    {
+      "id": "it-1bde9c",
+      "name": "Prawns",
+      "description": "Grilled prawns.",
+      "price": 20000,
+      "category": "wl-fish",
+      "icon": "Fish",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672602703-5c47dc97.jpg",
+      "tags": [],
+      "gradient": "from-emerald-500 to-teal-700",
+      "available": true
+    },
+    {
+      "id": "it-a63a1f",
+      "name": "Calamari",
+      "description": "Grilled calamari.",
+      "price": 20000,
+      "category": "wl-fish",
+      "icon": "Fish",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672526308-73972fef.jpg",
+      "tags": [],
+      "gradient": "from-emerald-400 to-teal-600",
+      "available": true
+    },
+    {
+      "id": "it-3895c9",
+      "name": "Pweza (Octopus)",
+      "description": "Grilled octopus.",
+      "price": 20000,
+      "category": "wl-fish",
+      "icon": "Fish",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672665963-0ac9fa49.jpg",
+      "tags": [],
+      "gradient": "from-brand-400 to-brand-700",
+      "available": true
+    },
+    {
+      "id": "it-4f556e",
+      "name": "Tilapia Sato",
+      "description": "Grilled tilapia.",
+      "price": 20000,
+      "category": "wl-fish",
+      "icon": "Fish",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672637213-7e583f44.jpg",
+      "tags": [],
+      "gradient": "from-yellow-300 to-amber-600",
+      "available": true
+    },
+    {
+      "id": "it-fe17b0",
+      "name": "Changu",
+      "description": "Grilled changu.",
+      "price": 20000,
+      "category": "wl-fish",
+      "icon": "Fish",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672858926-8918632e.jpg",
+      "tags": [],
+      "gradient": "from-lime-400 to-emerald-700",
+      "available": true
+    },
+    {
+      "id": "it-1686ea",
+      "name": "T-Bone",
+      "description": "BBQ T-bone.",
+      "price": 10000,
+      "category": "wl-bbq",
+      "icon": "Flame",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672245924-089410e4.jpg",
+      "tags": [],
+      "gradient": "from-sky-400 to-blue-700",
+      "available": true
+    },
+    {
+      "id": "it-98146e",
+      "name": "Mbuzi",
+      "description": "Goat meat. mbuzi choma",
+      "price": 20000,
+      "category": "wl-bbq",
+      "icon": "Flame",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672267403-c32f7cd8.jpg",
+      "tags": [],
+      "gradient": "from-brand-500 to-brand-800",
+      "available": true
+    },
+    {
+      "id": "it-3399d3",
+      "name": "Kuku bloira",
+      "description": "BBQ chicken.",
+      "price": 20000,
+      "category": "wl-bbq",
+      "icon": "Drumstick",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792672224648-c4126b4c.jpg",
+      "tags": [],
+      "gradient": "from-amber-400 to-orange-600",
+      "available": true
+    },
+    {
+      "id": "it-f7dfc6",
+      "name": "Sausage",
+      "description": "BBQ sausage.",
+      "price": 3000,
+      "category": "wl-bbq",
+      "icon": "Utensils",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671884882-e65d0bca.jpg",
+      "tags": [],
+      "gradient": "from-emerald-500 to-teal-700",
+      "available": true
+    },
+    {
+      "id": "it-5ad600",
+      "name": "Fillet (Mishikaki)",
+      "description": "Beef fillet skewers.",
+      "price": 3000,
+      "category": "wl-bbq",
+      "icon": "Utensils",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671918765-e24a464e.jpg",
+      "tags": [],
+      "gradient": "from-emerald-400 to-teal-600",
+      "available": true
+    },
+    {
+      "id": "it-04faf1",
+      "name": "Drumstick",
+      "description": "Chicken drumstick.",
+      "price": 10000,
+      "category": "wl-bbq",
+      "icon": "Drumstick",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671829256-5a3bd647.jpg",
+      "tags": [],
+      "gradient": "from-brand-400 to-brand-700",
+      "available": true
+    },
+    {
+      "id": "it-5a8b2f",
+      "name": "Kuku Kienyeji",
+      "description": "Free-range local chicken.",
+      "price": 30000,
+      "category": "wl-bbq",
+      "icon": "Drumstick",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671856138-78b22cb2.jpg",
+      "tags": [],
+      "gradient": "from-yellow-300 to-amber-600",
+      "available": true
+    },
+    {
+      "id": "it-a65a4d",
+      "name": "Chips",
+      "description": "Fried potatoes.",
+      "price": 2000,
+      "category": "wl-sides",
+      "icon": "Utensils",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671563445-ffc74cd3.jpg",
+      "tags": [],
+      "gradient": "from-lime-400 to-emerald-700",
+      "available": true
+    },
+    {
+      "id": "it-1d35ed",
+      "name": "Plantain",
+      "description": "Fried plantain.",
+      "price": 1000,
+      "category": "wl-sides",
+      "icon": "Leaf",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671542321-0d2b19c2.jpg",
+      "tags": [],
+      "gradient": "from-sky-400 to-blue-700",
+      "available": true
+    },
+    {
+      "id": "it-34398d",
+      "name": "Ugali",
+      "description": "Maize meal.",
+      "price": 2000,
+      "category": "wl-sides",
+      "icon": "Wheat",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671523563-39d6187b.jpg",
+      "tags": [],
+      "gradient": "from-brand-500 to-brand-800",
+      "available": true
+    },
+    {
+      "id": "it-6ae619",
+      "name": "Mush Potatoes",
+      "description": "Mashed potatoes.",
+      "price": 4000,
+      "category": "wl-sides",
+      "icon": "Utensils",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671456994-ea67cc3b.jpg",
+      "tags": [],
+      "gradient": "from-amber-400 to-orange-600",
+      "available": true
+    },
+    {
+      "id": "it-f33d66",
+      "name": "Wages",
+      "description": "Wedges.",
+      "price": 4000,
+      "category": "wl-sides",
+      "icon": "Utensils",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671485003-b3963559.jpg",
+      "tags": [],
+      "gradient": "from-emerald-500 to-teal-700",
+      "available": true
+    },
+    {
+      "id": "it-308835",
+      "name": "Wali",
+      "description": "Steamed rice.",
+      "price": 2000,
+      "category": "wl-sides",
+      "icon": "Wheat",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671505292-c896b0a6.jpg",
+      "tags": [],
+      "gradient": "from-emerald-400 to-teal-600",
+      "available": true
+    },
+    {
+      "id": "it-bb42dd",
+      "name": "Pilau",
+      "description": "Spiced pilau rice.",
+      "price": 4000,
+      "category": "wl-sides",
+      "icon": "Wheat",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792670777985-70e22867.jpg",
+      "tags": [],
+      "gradient": "from-brand-400 to-brand-700",
+      "available": true
+    },
+    {
+      "id": "it-460fca",
+      "name": "Ribs",
+      "description": "BBQ ribs.",
+      "price": 20000,
+      "category": "wl-bbq",
+      "icon": "Flame",
+      "image": "https://rmmigqjmrlyvcwzqnrbo.supabase.co/storage/v1/object/public/food-point-uploads/dish-1792671595948-7f5f7039.jpg",
+      "tags": [],
+      "gradient": "from-yellow-300 to-amber-600",
       "available": true
     }
   ]

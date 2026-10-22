@@ -1,5 +1,7 @@
 export type OrderStatus = 'new' | 'preparing' | 'ready' | 'delivered' | 'cancelled'
 
+export type OrderType = 'dine_in' | 'delivery' | 'takeaway'
+
 export interface MenuItem {
   id: string
   name: string
@@ -83,7 +85,10 @@ export interface OrderItem extends CartLine {
 
 export interface Order {
   code: string
-  table: number
+  type?: OrderType
+  table: number | null
+  phone?: string
+  address?: string
   customer: string
   items: OrderItem[]
   note: string

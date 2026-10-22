@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Armchair, X } from 'lucide-react'
+import { Armchair, X, Bike, ShoppingBag } from 'lucide-react'
+import type { Order } from '../types'
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(
@@ -77,10 +78,26 @@ export default function TablePicker({
   )
 }
 
-export function TableBadge({ table }: { table: number }) {
+export function TableBadge({ table }: { table: number | null }) {
+  if (table == null) return null
   return (
     <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-2.5 py-1 text-xs font-extrabold text-white">
       <Armchair className="h-3.5 w-3.5" /> T{table}
+    </span>
+  )
+}
+
+export function OrderSourceBadge({ order }: { order: Order }) {
+  if (order.table != null) return <TableBadge table={order.table} />
+  const delivery = order.type === 'delivery'
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1 text-xs font-extrabold ${
+        delivery ? 'bg-amber-100 text-amber-800' : 'bg-violet-100 text-violet-700'
+      }`}
+    >
+      {delivery ? <Bike className="h-3.5 w-3.5" /> : <ShoppingBag className="h-3.5 w-3.5" />}
+      {delivery ? 'Delivery' : 'Takeaway'}
     </span>
   )
 }

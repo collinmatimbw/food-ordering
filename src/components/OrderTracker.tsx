@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Receipt, RotateCcw } from 'lucide-react'
+import { Receipt, RotateCcw, Phone, MapPin } from 'lucide-react'
 import type { Order } from '../types'
 import { StatusPill } from './StatusPill'
 import { getIcon } from '../icons'
@@ -44,8 +44,22 @@ export default function OrderTracker({
             {order.code}
           </h2>
           <p className="mt-1 text-sm text-ink-500">
-            Table {order.table} · {order.customer}
+            {order.table != null
+              ? `Table ${order.table} · ${order.customer}`
+              : `${order.type === 'delivery' ? 'Delivery' : 'Takeaway'} · ${order.customer}`}
           </p>
+          {order.phone && (
+            <p className="mt-1 text-[12.5px] font-semibold text-ink-600">
+              <Phone className="mr-1 inline h-3.5 w-3.5" />
+              {order.phone}
+            </p>
+          )}
+          {order.address && (
+            <p className="mt-0.5 text-[12.5px] text-ink-500">
+              <MapPin className="mr-1 inline h-3.5 w-3.5" />
+              {order.address}
+            </p>
+          )}
         </div>
         <div className="flex flex-col items-end gap-2">
           <StatusPill status={order.status} />

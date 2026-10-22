@@ -59,8 +59,26 @@ export default function ReceiptModal({
               <div className="grid grid-cols-2 gap-1 border-b border-dashed border-slate-300 py-3 text-[11px]">
                 <span>Receipt</span>
                 <span className="text-right font-bold">{order.code}</span>
-                <span>Table</span>
-                <span className="text-right font-bold">{order.table}</span>
+                <span>{order.table != null ? 'Table' : 'Order type'}</span>
+                <span className="text-right font-bold">
+                  {order.table != null
+                    ? order.table
+                    : order.type === 'delivery'
+                      ? 'Delivery'
+                      : 'Takeaway'}
+                </span>
+                {order.phone && (
+                  <>
+                    <span>Phone</span>
+                    <span className="text-right font-bold">{order.phone}</span>
+                  </>
+                )}
+                {order.address && (
+                  <>
+                    <span>{order.type === 'delivery' ? 'Location' : 'Note'}</span>
+                    <span className="text-right">{order.address}</span>
+                  </>
+                )}
                 <span>Guest</span>
                 <span className="text-right">{order.customer}</span>
                 <span>Date</span>

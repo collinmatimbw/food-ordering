@@ -14,7 +14,7 @@ import {
   Loader2,
 } from 'lucide-react'
 import type { MenuCategory, MenuItem } from '../types'
-import { createMenuItem, updateMenuItem, deleteMenuItem, uploadImage } from '../api'
+import { createMenuItem, updateMenuItem, deleteMenuItem, deleteMenuCategory, uploadImage } from '../api'
 import { getIcon } from '../icons'
 import { money } from '../utils'
 import { toast } from './Toasts'
@@ -50,6 +50,7 @@ interface Props {
   categories: MenuCategory[]
   currency: string
   onChanged: (items: MenuItem[]) => void
+  onCategoriesChanged?: (categories: MenuCategory[]) => void
 }
 
 interface FormState {
@@ -73,7 +74,13 @@ const emptyForm = (categories: MenuCategory[]): FormState => ({
   tags: '',
 })
 
-export default function MenuManager({ items, categories, currency, onChanged }: Props) {
+export default function MenuManager({
+  items,
+  categories,
+  currency,
+  onChanged,
+  onCategoriesChanged,
+}: Props) {
   const [query, setQuery] = useState('')
   const [form, setForm] = useState<FormState | null>(null)
   const [busy, setBusy] = useState(false)
@@ -188,6 +195,19 @@ export default function MenuManager({ items, categories, currency, onChanged }: 
     }
   }
 
+  async function removeCategory(cat: MenuCategory) {
+    setBusy(true)
+    try {
+      await deleteMenuCategory(cat.id)
+      onCategoriesChanged?.(categories.filter((c) => c.id !== cat.id))
+      toast(`${cat.name} removed`, 'success')
+    } catch (e) {
+      toast(e instanceof Error ? e.message : 'Delete failed', 'error')
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <div>
       {/* Toolbar */}
@@ -208,6 +228,40 @@ export default function MenuManager({ items, categories, currency, onChanged }: 
           <Plus className="h-4 w-4" /> Add dish
         </button>
       </div>
+
+      {/* Category strip */}
+      {onCategoriesChanged && (
+        <div className="mb-5 flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+          <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            Categories
+          </span>
+          {categories.map((cat) => {
+            const count = items.filter((i) => i.category === cat.id).length
+            const CatIcon = getIcon(cat.icon)
+            return (
+              <span
+                key={cat.id}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-1 text-[12px] font-bold text-slate-600"
+              >
+                <CatIcon className="h-3.5 w-3.5" />
+                {cat.name}
+                <span className="rounded-full bg-white px-1.5 text-[10px] text-slate-400">
+                  {count}
+                </span>
+                <button
+                  onClick={() => removeCategory(cat)}
+                  disabled={busy || count > 0}
+                  title={count > 0 ? 'Move or delete its dishes first' : 'Remove category'}
+                  aria-label={`Remove ${cat.name} category`}
+                  className="text-slate-400 transition hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </span>
+            )
+          })}
+        </div>
+      )}
 
       {/* Grouped list */}
       {categories.map((cat) => {

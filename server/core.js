@@ -382,6 +382,22 @@ export function buildApi({ storage }) {
     res.status(201).json(category)
   })
 
+  app.delete('/api/menu/categories/:id', async (req, res) => {
+    await ensureLoaded()
+    const id = String(req.params.id || '').trim().toLowerCase()
+    const idx = menuState.categories.findIndex((c) => c.id.toLowerCase() === id)
+    if (idx === -1) return res.status(404).json({ error: 'Category not found' })
+
+    const used = menuState.items.filter((i) => i.category === menuState.categories[idx].id)
+    if (used.length > 0)
+      return res.status(409).json({ error: `Move or delete the ${used.length} item(s) in this category first.` })
+
+    const removed = menuState.categories[idx]
+    menuState.categories.splice(idx, 1)
+    persistMenu()
+    res.json({ ok: true, id: removed.id })
+  })
+
   app.post('/api/menu/items', async (req, res) => {
     await ensureLoaded()
     const clean = sanitizeItem(req.body || {})
@@ -467,6 +483,25 @@ export function buildApi({ storage }) {
     res.json(sorted)
   })
 
+  app.get('/api/orders/track', async (req, res) => {
+    await ensureLoaded()
+    const code = String(req.query.code || '').trim()
+    const phone = String(req.query.phone || '').trim()
+    if (!code) return res.status(400).json({ error: 'Enter your order code.' })
+
+    const order = ordersState.orders.find((o) => o.code.toLowerCase() === code.toLowerCase())
+    if (!order) return res.status(404).json({ error: 'No order found with that code.' })
+
+    const norm = (s) => String(s || '').replace(/\D/g, '').slice(-9)
+    if (order.phone) {
+      if (!phone) return res.status(401).json({ error: 'Enter the phone number used for this order.' })
+      if (norm(order.phone) !== norm(phone))
+        return res.status(404).json({ error: 'No order found with that code and phone number.' })
+    }
+
+    res.json(order)
+  })
+
   app.get('/api/orders/:code', async (req, res) => {
     await ensureLoaded()
     const order = ordersState.orders.find((o) => o.code.toLowerCase() === req.params.code.toLowerCase())
@@ -490,7 +525,8 @@ export function buildApi({ storage }) {
       const p = String(phone || '').trim()
       const addr = String(address || location || '').trim()
       if (!p) return res.status(400).json({ error: 'Please provide a phone number.' })
-      if (!addr) return res.status(400).json({ error: 'Please provide a delivery location/address.' })
+      if (orderType === 'delivery' && !addr)
+        return res.status(400).json({ error: 'Please provide a delivery location/address.' })
     }
 
     if (!Array.isArray(items) || items.length === 0) {

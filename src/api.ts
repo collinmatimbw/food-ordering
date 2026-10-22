@@ -3,6 +3,7 @@ import type {
   MenuItem,
   Order,
   OrderStatus,
+  OrderType,
   KisiniaConfig,
 } from './types'
 
@@ -44,7 +45,10 @@ export type OrderLineInput =
     }
 
 export const placeOrder = (payload: {
-  table: number
+  table?: number | null
+  type?: OrderType
+  phone?: string
+  address?: string
   customer: string
   items: OrderLineInput[]
   note?: string
@@ -53,6 +57,10 @@ export const placeOrder = (payload: {
     method: 'POST',
     body: JSON.stringify(payload),
   })
+
+/** Look up a remote order with the code + phone used when ordering. */
+export const trackOrder = (code: string, phone: string) =>
+  request<Order>(`${BASE}/orders/track?code=${encodeURIComponent(code)}&phone=${encodeURIComponent(phone)}`)
 
 export const updateOrderStatus = (code: string, status: OrderStatus) =>
   request<Order>(`${BASE}/orders/${code}/status`, {
@@ -84,6 +92,10 @@ export const updateMenuItem = (id: string, payload: Partial<MenuInput> & { avail
 
 export const deleteMenuItem = (id: string) =>
   request<{ ok: boolean }>(`${BASE}/menu/items/${id}`, { method: 'DELETE' })
+
+/** Remove a category. Fails on the server if it still has dishes. */
+export const deleteMenuCategory = (id: string) =>
+  request<{ ok: boolean }>(`${BASE}/menu/categories/${encodeURIComponent(id)}`, { method: 'DELETE' })
 
 /** Upload a dish photo; resolves with the stored image URL (e.g. /uploads/…). */
 export const uploadImage = async (file: File): Promise<string> => {

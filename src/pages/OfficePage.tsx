@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { fetchMenu, fetchOrders, updateOrderStatus } from '../api'
 import type { MenuResponse, Order, OrderStatus } from '../types'
 import { STATUS_META, StatusPill } from '../components/StatusPill'
-import { TableBadge } from '../components/TablePicker'
+import { TableBadge, OrderSourceBadge } from '../components/TablePicker'
 import { toast, ToastHost } from '../components/Toasts'
 import MenuManager from '../components/MenuManager'
 import KisiniaManager from '../components/KisiniaManager'
@@ -27,6 +27,9 @@ import {
   LayoutGrid,
   List,
   Menu,
+  MapPin,
+  Phone,
+  QrCode,
   ReceiptText,
   Search,
   Sparkles,
@@ -40,6 +43,7 @@ import {
   Wallet,
   X,
 } from 'lucide-react'
+import TableQrSheet from '../components/TableQrSheet'
 
 type ViewKey = 'orders' | 'customers' | 'tables' | 'reports' | 'menu' | 'kisinia'
 
@@ -106,6 +110,12 @@ export default function OfficePage() {
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'all'>('all')
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
   const [navOpen, setNavOpen] = useState(false)
+  const [qrOpen, setQrOpen] = useState(false)
+  const [qrBaseUrl] = useState(() => {
+    if (typeof window === 'undefined') return ''
+    const origin = window.location.origin
+    return origin.includes('localhost') ? 'https://food-ordering-sigma-ashen.vercel.app' : origin
+  })
   const seen = useRef<Set<string>>(new Set())
   const soundRef = useRef(sound)
   soundRef.current = sound
@@ -255,6 +265,7 @@ export default function OfficePage() {
     const m = new Map<number, Order[]>()
     for (const o of orders) {
       if (o.status === 'cancelled' || o.status === 'delivered') continue
+      if (o.table == null) continue
       if (!m.has(o.table)) m.set(o.table, [])
       m.get(o.table)!.push(o)
     }
@@ -706,7 +717,7 @@ export default function OfficePage() {
                                   </button>
                                 </td>
                                 <td className="px-5 py-3">
-                                  <TableBadge table={order.table} />
+                                  <OrderSourceBadge order={order} />
                                 </td>
                                 <td className="px-5 py-3">
                                   <span className="flex items-center gap-2">
@@ -921,6 +932,22 @@ export default function OfficePage() {
                   <p className="text-sm text-slate-400">No tables currently occupied.</p>
                 </div>
               )}
+
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => setQrOpen(true)}
+                  className="btn-primary no-print inline-flex items-center gap-2"
+                >
+                  <QrCode className="h-4 w-4" /> Table QR codes
+                </button>
+              </div>
+
+              <TableQrSheet
+                open={qrOpen}
+                onClose={() => setQrOpen(false)}
+                tables={totalTables || 24}
+                baseUrl={qrBaseUrl}
+              />
             </main>
           ) : view === 'reports' ? (
             <main className="px-4 pb-16 pt-5 sm:px-6 lg:px-6 xl:px-10">
@@ -1046,6 +1073,9 @@ export default function OfficePage() {
                   categories={menu.categories}
                   currency={currency}
                   onChanged={(items) => setMenu((prev) => (prev ? { ...prev, items } : prev))}
+                  onCategoriesChanged={(categories) =>
+                    setMenu((prev) => (prev ? { ...prev, categories } : prev))
+                  }
                 />
               ) : (
                 <div className="h-96 animate-pulse rounded-3xl border border-slate-200 bg-white" />
@@ -1110,7 +1140,7 @@ export default function OfficePage() {
                 />
                 <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
                   <div className="flex min-w-0 items-center gap-2.5">
-                    <TableBadge table={selectedOrder.table} />
+                    <OrderSourceBadge order={selectedOrder} />
                     <div className="min-w-0">
                       <p className="font-display truncate font-extrabold text-ink-900">
                         {selectedOrder.code}
@@ -1128,6 +1158,25 @@ export default function OfficePage() {
                     <X className="h-4 w-4" />
                   </button>
                 </div>
+                {selectedOrder.table == null && (
+                  <div className="border-b border-slate-100 bg-amber-50/70 px-5 py-3">
+                    <p className="text-[11px] font-bold uppercase tracking-widest text-amber-700">
+                      {selectedOrder.type === 'delivery' ? 'Delivery details' : 'Takeaway details'}
+                    </p>
+                    {selectedOrder.phone && (
+                      <p className="mt-1 text-[13px] font-bold text-ink-900">
+                        <Phone className="mr-1 inline h-3.5 w-3.5" />
+                        {selectedOrder.phone}
+                      </p>
+                    )}
+                    {selectedOrder.address && (
+                      <p className="mt-0.5 text-[12.5px] text-ink-600">
+                        <MapPin className="mr-1 inline h-3.5 w-3.5" />
+                        {selectedOrder.address}
+                      </p>
+                    )}
+                  </div>
+                )}
                 {/* Progress steps */}
                 {selectedOrder.status === 'cancelled' ? (
                   <div className="border-b border-slate-100 bg-rose-50 px-5 py-2.5">
@@ -1502,7 +1551,7 @@ const OrderCard = forwardRef<
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <TableBadge table={order.table} />
+              <OrderSourceBadge order={order} />
               <span className="font-display text-[15px] font-semibold tracking-tight text-ink-900">
                 {order.code}
               </span>
