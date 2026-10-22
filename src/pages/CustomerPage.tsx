@@ -364,7 +364,7 @@ export default function CustomerPage() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search pilau, chips mayai, kachumbariâ€¦"
+              placeholder="Search pilau, chips mayai, kachumbari…"
               className="w-full bg-transparent text-sm text-ink-900 outline-none placeholder:text-ink-400"
             />
             {query && (
@@ -412,7 +412,7 @@ export default function CustomerPage() {
               <div className="pointer-events-none absolute -bottom-20 right-1/3 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
               <div className="relative max-w-lg">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur">
-                  <Clock className="h-3 w-3" /> Open now Â· 08:00 â€“ 23:00
+                  <Clock className="h-3 w-3" /> Open now · 08:00 – 23:00
                 </span>
                 <h2 className="font-display mt-3 text-xl font-extrabold leading-tight text-white sm:text-2xl md:text-3xl">
                   Karibu Willis Lounge.
@@ -420,15 +420,15 @@ export default function CustomerPage() {
                   Bar, grill & kitchen.
                 </h2>
                 <p className="mt-2 max-w-md text-[13px] leading-relaxed text-white/85 sm:text-sm">
-                  Order from your table â€” nyama choma, pilau, chips mayai and more.
-                  Freshly prepared, delivered to your seat.
+                  Order from your table, order for delivery anywhere in Dar es Salaam, or
+                  collect at the lounge. Nyama choma, pilau, chips mayai and more.
                 </p>
                 <div className="mt-4 flex flex-wrap items-center gap-3 text-[12px] font-semibold text-white/90">
                   <span className="inline-flex items-center gap-1.5">
                     <Star className="h-3.5 w-3.5 fill-white text-white" /> 4.8 rating
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5" /> 15â€“25 min
+                    <Clock className="h-3.5 w-3.5" /> 15–25 min
                   </span>
                   <span className="inline-flex items-center gap-1.5">
                     <MapPin className="h-3.5 w-3.5" /> Mikocheni B
@@ -1111,7 +1111,7 @@ function CartSheet({
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-[13px] font-bold text-ink-900">
-                    {menu?.kisinia?.title ?? 'Kisinia'} Â· {quote.sizeName}
+                    {menu?.kisinia?.title ?? 'Kisinia'} · {quote.sizeName}
                   </p>
                   <p className="mt-0.5 text-[11.5px] leading-snug text-ink-500">
                     {quote.picks.length
@@ -1174,7 +1174,7 @@ function CartSheet({
                         <input
                           value={lineNotes[item.id] ?? ''}
                           onChange={(e) => setLineNote(item.id, e.target.value)}
-                          placeholder="Which soda? e.g. Coca-Cola, Fanta, Spriteâ€¦"
+                          placeholder="Which soda? e.g. Coca-Cola, Fanta, Sprite…"
                           aria-label={`Soda preference for ${item.name}`}
                           className="input py-1.5 text-[11.5px]"
                         />
@@ -1312,7 +1312,7 @@ function CartSheet({
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
-            placeholder="No chilli, extra kachumbariâ€¦"
+            placeholder="No chilli, extra kachumbari…"
             className="input resize-none"
           />
         </div>
@@ -1339,14 +1339,20 @@ function CartSheet({
           {busy ? (
             <>
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-              Sendingâ€¦
+              Sending…
             </>
-          ) : table ? (
-            <>
-              Place order Â· Table {table} Â· {money(currency, total)}
-            </>
+          ) : mode === 'dine_in' ? (
+            table ? (
+              <>
+                Place order · Table {table} · {money(currency, total)}
+              </>
+            ) : (
+              <>Select a table to continue</>
+            )
           ) : (
-            <>Select a table to continue</>
+            <>
+              Place order · {money(currency, total)}
+            </>
           )}
         </button>
       </div>

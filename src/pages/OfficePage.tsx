@@ -230,7 +230,9 @@ export default function OfficePage() {
       if (view === 'orders' && filter !== 'all' && o.status !== filter) return false
       if (search.trim()) {
         const q = search.toLowerCase()
-        const hay = `${o.code} ${o.customer} ${o.note || ''}`.toLowerCase()
+        const hay = `${o.code} ${o.customer} ${o.note || ''} ${o.phone || ''} ${o.address || ''} ${
+          o.table ?? ''
+        }`.toLowerCase()
         if (!hay.includes(q)) return false
       }
       return true
@@ -1577,6 +1579,18 @@ const OrderCard = forwardRef<
                 {timeAgo(order.createdAt)}
               </span>
             </p>
+            {order.table == null && order.address && (
+              <p className="mt-1 truncate text-[11px] font-semibold text-amber-700">
+                <MapPin className="mr-0.5 inline h-3 w-3" />
+                {order.address}
+              </p>
+            )}
+            {order.table == null && order.phone && (
+              <p className="truncate text-[11px] text-ink-500">
+                <Phone className="mr-0.5 inline h-3 w-3" />
+                {order.phone}
+              </p>
+            )}
           </div>
           <StatusPill status={order.status} />
         </div>
