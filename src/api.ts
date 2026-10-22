@@ -101,9 +101,9 @@ export const placeOrder = (payload: {
     body: JSON.stringify(payload),
   })
 
-/** Look up a remote order with the code + phone used when ordering. */
-export const trackOrder = (code: string, phone: string) =>
-  request<Order>(`${BASE}/orders/track?code=${encodeURIComponent(code)}&phone=${encodeURIComponent(phone)}`)
+/** Look up every order placed with this phone number (newest first). */
+export const trackOrders = (phone: string) =>
+  request<Order[]>(`${BASE}/orders/track?phone=${encodeURIComponent(phone)}`)
 
 export const updateOrderStatus = (code: string, status: OrderStatus) =>
   officeRequest<Order>(`${BASE}/orders/${code}/status`, {

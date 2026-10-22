@@ -17,7 +17,7 @@ import {
   Armchair,
   Bike,
 } from 'lucide-react'
-import { fetchMenu, fetchOrder, placeOrder, trackOrder } from '../api'
+import { fetchMenu, fetchOrder, placeOrder, trackOrders } from '../api'
 import type { MenuResponse, Order, KisiniaCartLine, KisiniaConfig, MenuItem, OrderType } from '../types'
 import { getIcon } from '../icons'
 import { money } from '../utils'
@@ -35,30 +35,24 @@ import DishImage from '../components/DishImage'
 
 const CART_KEY = 'savor.cart'
 const TABLE_KEY = 'savor.table'
-const HISTORY_KEY = 'savor.history'
+const TRACK_PHONE_KEY = 'savor.trackPhone'
 const KISINIA_CART_KEY = 'savor.kisinia'
 
-type HistoryEntry = { code: string; phone: string }
-
-function readHistory(): HistoryEntry[] {
+/** Last phone number used to track orders (tracking is phone-only). */
+function readTrackedPhone(): string {
   try {
-    const raw = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
-    if (!Array.isArray(raw)) return []
-    return raw
-      .map((e) =>
-        typeof e === 'string'
-          ? { code: e, phone: '' }
-          : { code: String(e?.code || ''), phone: String(e?.phone || '') }
-      )
-      .filter((e) => e.code)
+    return (localStorage.getItem(TRACK_PHONE_KEY) || '').trim()
   } catch {
-    return []
+    return ''
   }
 }
 
-function writeHistory(entries: HistoryEntry[]) {
+function writeTrackedPhone(phone: string) {
   try {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(entries.slice(0, 20)))
+    if (phone) localStorage.setItem(TRACK_PHONE_KEY, phone)
+    else localStorage.removeItem(TRACK_PHONE_KEY)
+    // drop the old code-based history store from previous versions
+    localStorage.removeItem('savor.history')
   } catch {}
 }
 
@@ -113,7 +107,6 @@ export default function CustomerPage() {
   const [activeOrder, setActiveOrder] = useState<Order | null>(null)
   const [history, setHistory] = useState<Order[]>([])
   const [receipt, setReceipt] = useState<Order | null>(null)
-  const [trackCode, setTrackCode] = useState('')
   const [trackPhone, setTrackPhone] = useState('')
   const [tracking, setTracking] = useState(false)
 
@@ -133,14 +126,31 @@ export default function CustomerPage() {
     if (table) localStorage.setItem(TABLE_KEY, String(table))
   }, [table])
 
-  // Load order history (only orders that were placed with a phone number)
+  // My orders list = every order placed with the tracked phone number
+  async function loadMyOrders() {
+    const saved = readTrackedPhone()
+    if (saved && !trackPhone) setTrackPhone(saved)
+    if (!saved) {
+      setHistory([])
+      return
+    }
+    try {
+      const list = await trackOrders(saved)
+      setHistory(list)
+    } catch {
+      /* ignore */
+    }
+  }
+
   useEffect(() => {
-    const entries = readHistory().filter((e) => e.phone)
-    if (entries.length === 0) return
-    Promise.all(entries.map((e) => fetchOrder(e.code, e.phone).catch(() => null)))
-      .then((orders) => setHistory(orders.filter((o): o is Order => Boolean(o))))
-      .catch(() => {})
+    loadMyOrders()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (historyOpen) loadMyOrders()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [historyOpen])
 
   // Live menu updates + order tracking
   useEffect(() => {
@@ -297,18 +307,23 @@ export default function CustomerPage() {
   }
 
   const trackLookup = async () => {
-    if (!trackCode.trim()) return toast('Enter your order code', 'error')
-    if (!trackPhone.trim()) return toast('Enter the phone number used for this order', 'error')
+    const phoneValue = trackPhone.trim()
+    if (phoneValue.replace(/\D/g, '').length < 7)
+      return toast('Enter the phone number used to place the order', 'error')
     setTracking(true)
     try {
-      const order = await trackOrder(trackCode.trim(), trackPhone.trim())
-      setActiveOrder(order)
+      const list = await trackOrders(phoneValue)
+      if (list.length === 0) {
+        toast('No orders found for that phone number', 'error')
+        return
+      }
+      writeTrackedPhone(phoneValue)
+      setHistory(list)
+      setActiveOrder(list[0])
       setHistoryOpen(false)
-      const entry = { code: order.code, phone: order.phone || trackPhone.trim() }
-      writeHistory([entry, ...readHistory().filter((h) => h.code !== order.code)])
-      setHistory((prev) => [order, ...prev.filter((h) => h.code !== order.code)])
+      toast(`Found ${list.length} order${list.length > 1 ? 's' : ''} for ${phoneValue}`)
     } catch (e) {
-      toast(e instanceof Error ? e.message : 'Order not found', 'error')
+      toast(e instanceof Error ? e.message : 'Orders not found', 'error')
     } finally {
       setTracking(false)
     }
@@ -808,8 +823,8 @@ export default function CustomerPage() {
         decPlatter={decPlatter}
         clear={clear}
         onPlaced={(o) => {
-          writeHistory([{ code: o.code, phone: o.phone || phone }, ...readHistory()])
-          setHistory((prev) => [o, ...prev])
+          // Checkout never adds to "My orders" — orders appear only after
+          // the customer tracks them with their phone number.
           setActiveOrder(o)
         }}
       />
@@ -819,38 +834,33 @@ export default function CustomerPage() {
         <div className="flex flex-col gap-4 p-5">
           <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
             <p className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
-              Track an order
+              Track your orders
             </p>
             <p className="mt-1 text-[12px] text-ink-500">
-              Enter the code you received (e.g. SV-1A2B-004) and the phone number you used.
+              Enter the phone number you ordered with — no order code needed.
             </p>
-            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-              <input
-                value={trackCode}
-                onChange={(e) => setTrackCode(e.target.value)}
-                placeholder="Order code"
-                className="input flex-1"
-              />
+            <div className="mt-2 flex flex-col gap-2">
               <input
                 value={trackPhone}
                 onChange={(e) => setTrackPhone(e.target.value)}
                 inputMode="tel"
                 placeholder="Phone number"
-                className="input flex-1"
+                className="input"
               />
+              <button
+                onClick={trackLookup}
+                disabled={tracking}
+                className="btn-primary w-full disabled:opacity-60"
+              >
+                {tracking ? 'Looking up…' : 'Track orders'}
+              </button>
             </div>
-            <button
-              onClick={trackLookup}
-              disabled={tracking}
-              className="btn-primary mt-2 w-full disabled:opacity-60"
-            >
-              {tracking ? 'Looking up…' : 'Track order'}
-            </button>
           </div>
 
           {history.length === 0 ? (
             <EmptyState>
-              No orders yet. Your past and current orders will appear here.
+              No tracked orders yet. Enter your phone number above and your orders
+              will appear here.
             </EmptyState>
           ) : (
             <div className="flex flex-col gap-3">
@@ -1302,7 +1312,7 @@ function CartSheet({
             className="input"
           />
           <p className="text-[11.5px] text-ink-400">
-            You'll use this number with your order code to track the order.
+            You'll use this number to track your order.
           </p>
         </div>
 

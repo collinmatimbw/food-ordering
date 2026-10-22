@@ -499,18 +499,17 @@ export function buildApi({ storage }) {
 
   app.get('/api/orders/track', async (req, res) => {
     await ensureLoaded()
-    const code = String(req.query.code || '').trim()
-    const phone = String(req.query.phone || '').trim()
-    if (!code) return res.status(400).json({ error: 'Enter your order code.' })
-    if (!phone) return res.status(400).json({ error: 'Enter the phone number used for this order.' })
+    const phone = String(req.query.phone || '').trim().slice(0, 40)
+    if (phone.replace(/\D/g, '').length < 7)
+      return res.status(400).json({ error: 'Enter the phone number used to order.' })
 
-    const order = ordersState.orders.find((o) => o.code.toLowerCase() === code.toLowerCase())
-    // Orders without a phone on file are never exposed to customers.
-    if (!order || !order.phone) return res.status(404).json({ error: 'No order found with that code and phone number.' })
-    if (phoneTail(order.phone) !== phoneTail(phone))
-      return res.status(404).json({ error: 'No order found with that code and phone number.' })
+    // Only orders with a phone on file are ever exposed to customers.
+    const found = ordersState.orders
+      .filter((o) => o.phone && phoneTail(o.phone) === phoneTail(phone))
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .slice(0, 20)
 
-    res.json(order)
+    res.json(found)
   })
 
   app.get('/api/orders/:code', async (req, res) => {
