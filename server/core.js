@@ -476,12 +476,23 @@ export function buildApi({ storage }) {
 
   app.post('/api/orders', async (req, res) => {
     await ensureLoaded()
-    const { table, customer, items, note } = req.body || {}
+    const { table, customer, items, note, type, phone, address, location } = req.body || {}
 
-    const tableNum = parseInt(table, 10)
-    if (!Number.isFinite(tableNum) || tableNum < 1 || tableNum > menuState.restaurant.tables) {
-      return res.status(400).json({ error: `Please choose a table between 1 and ${menuState.restaurant.tables}.` })
+    const orderType = type === 'delivery' || type === 'takeaway' || type === 'remote' ? type : 'dine_in'
+    let tableNum = null
+
+    if (orderType === 'dine_in') {
+      tableNum = parseInt(table, 10)
+      if (!Number.isFinite(tableNum) || tableNum < 1 || tableNum > menuState.restaurant.tables) {
+        return res.status(400).json({ error: `Please choose a table between 1 and ${menuState.restaurant.tables}.` })
+      }
+    } else {
+      const p = String(phone || '').trim()
+      const addr = String(address || location || '').trim()
+      if (!p) return res.status(400).json({ error: 'Please provide a phone number.' })
+      if (!addr) return res.status(400).json({ error: 'Please provide a delivery location/address.' })
     }
+
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'Your cart is empty.' })
     }
@@ -493,8 +504,11 @@ export function buildApi({ storage }) {
 
     const order = {
       code: orderCode(),
+      type: orderType,
       table: tableNum,
-      customer: String(customer || 'Guest').slice(0, 40),
+      phone: orderType !== 'dine_in' ? String(phone || '').trim().slice(0, 40) : '',
+      address: orderType !== 'dine_in' ? String(address || location || '').trim().slice(0, 160) : '',
+      customer: String(customer || 'Guest').trim().slice(0, 40) || 'Guest',
       items: resolved,
       note: typeof note === 'string' ? note.slice(0, 300) : '',
       subtotal,
