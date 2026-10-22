@@ -215,12 +215,20 @@ export function buildApi({ storage }) {
       ? body.tags.map((t) => String(t).trim().slice(0, 24)).filter(Boolean).slice(0, 3)
       : []
 
+    let sidesIncluded
+    if (body.sidesIncluded !== undefined && body.sidesIncluded !== null && body.sidesIncluded !== '') {
+      sidesIncluded = Math.round(Number(body.sidesIncluded))
+      if (!Number.isFinite(sidesIncluded) || sidesIncluded < 0 || sidesIncluded > 6) sidesIncluded = undefined
+    }
+
     if (!name) return { error: 'Item name is required.' }
     if (!Number.isFinite(price) || price < 0) return { error: 'A valid price is required.' }
     if (!menuState.categories.some((c) => c.id === category))
       return { error: 'Please choose a valid category.' }
 
-    return { name, description, price, category, icon, image, tags }
+    const out = { name, description, price, category, icon, image, tags }
+    if (sidesIncluded !== undefined) out.sidesIncluded = sidesIncluded
+    return out
   }
 
   function sanitizeKisinia(body) {
@@ -423,6 +431,11 @@ export function buildApi({ storage }) {
     if (body.tags !== undefined && Array.isArray(body.tags))
       item.tags = body.tags.map((t) => String(t).trim().slice(0, 24)).filter(Boolean).slice(0, 3)
     if (body.available !== undefined) item.available = Boolean(body.available)
+    if (body.sidesIncluded !== undefined && body.sidesIncluded !== null && body.sidesIncluded !== '') {
+      const si = Math.round(Number(body.sidesIncluded))
+      if (Number.isFinite(si) && si >= 0 && si <= 6) item.sidesIncluded = si
+      else if (body.sidesIncluded === null) delete item.sidesIncluded
+    }
 
     persistMenu()
     res.json(item)

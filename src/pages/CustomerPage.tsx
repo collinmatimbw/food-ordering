@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+﻿import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Search,
@@ -16,18 +16,20 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { fetchMenu, fetchOrder, placeOrder } from '../api'
-import type { MenuResponse, Order, KisiniaCartLine, KisiniaConfig } from '../types'
+import type { MenuResponse, Order, KisiniaCartLine, KisiniaConfig, MenuItem } from '../types'
 import { getIcon } from '../icons'
 import { money } from '../utils'
 import { quoteKisinia, kisiniaKey, KISINIA_ID, picksSummary } from '../kisinia'
 import DishCard from '../components/DishCard'
-import DishImage from '../components/DishImage'
 import KisiniaBuilder from '../components/KisiniaBuilder'
+// import GridSkeleton from '../components/GridSkeleton'
 import OrderTracker from '../components/OrderTracker'
 import ReceiptModal from '../components/ReceiptModal'
+import { ToastHost, toast, EmptyState } from '../components/Toasts'
 import TablePicker from '../components/TablePicker'
 import { Sheet } from '../components/TablePicker'
-import { toast, ToastHost, EmptyState } from '../components/Toasts'
+import PlatterPicker from '../components/PlatterPicker'
+import DishImage from '../components/DishImage'
 
 const CART_KEY = 'savor.cart'
 const TABLE_KEY = 'savor.table'
@@ -53,6 +55,11 @@ export default function CustomerPage() {
       return {}
     }
   })
+  const [platterCart, setPlatterCart] = useState<
+    Record<string, { itemId: string; sides: string[]; qty: number }>
+  >({})
+  const [platterOpen, setPlatterOpen] = useState(false)
+  const [activePlatter, setActivePlatter] = useState<MenuItem | null>(null)
   const [kisOpen, setKisOpen] = useState(false)
   const [table, setTable] = useState<number | null>(() => {
     const t = Number(localStorage.getItem(TABLE_KEY))
@@ -135,6 +142,7 @@ export default function CustomerPage() {
     if (!menu) return []
     return menu.items.filter((i) => {
       if (!i.available) return false
+      if (i.category === 'wl-platters') return false
       const inCat = category === 'all' || i.category === category
       const q = query.trim().toLowerCase()
       const inQuery =
@@ -160,7 +168,8 @@ export default function CustomerPage() {
 
   const count =
     Object.values(cart).reduce((a, b) => a + b, 0) +
-    Object.values(kisCart).reduce((a, l) => a + l.qty, 0)
+    Object.values(kisCart).reduce((a, l) => a + l.qty, 0) +
+    Object.values(platterCart).reduce((a, l) => a + l.qty, 0)
 
   const kisSubtotal = useMemo(
     () =>
@@ -171,14 +180,21 @@ export default function CustomerPage() {
     [kisCart, menu?.kisinia]
   )
 
+  const platterSubtotal = useMemo(() => {
+    if (!menu) return 0
+    const map = new Map(menu.items.map((i) => [i.id, i.price]))
+    return Object.values(platterCart).reduce((s, l) => s + (map.get(l.itemId) ?? 0) * l.qty, 0)
+  }, [platterCart, menu])
+
   const subtotal = useMemo(() => {
     if (!menu) return 0
     const map = new Map(menu.items.map((i) => [i.id, i.price]))
     return (
       Object.entries(cart).reduce((s, [id, qty]) => s + (map.get(id) ?? 0) * qty, 0) +
-      kisSubtotal
+      kisSubtotal +
+      platterSubtotal
     )
-  }, [cart, menu, kisSubtotal])
+  }, [cart, menu, kisSubtotal, platterSubtotal])
 
   const inc = (id: string) => setCart((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }))
   const dec = (id: string) =>
@@ -211,9 +227,31 @@ export default function CustomerPage() {
       return next
     })
 
+  const addPlatter = (platter: MenuItem, sides: MenuItem[], qty: number) => {
+    const sideIds = sides.map((s) => s.id).sort()
+    const key = `${platter.id}|${sideIds.join(',')}`
+    setPlatterCart((p) => ({
+      ...p,
+      [key]: { itemId: platter.id, sides: sideIds, qty: (p[key]?.qty ?? 0) + qty },
+    }))
+    toast(`${platter.name} added to cart`, 'success')
+  }
+  const incPlatter = (key: string) =>
+    setPlatterCart((p) => (p[key] ? { ...p, [key]: { ...p[key], qty: p[key].qty + 1 } } : p))
+  const decPlatter = (key: string) =>
+    setPlatterCart((p) => {
+      const next = { ...p }
+      if (!next[key]) return p
+      const q = next[key].qty - 1
+      if (q <= 0) delete next[key]
+      else next[key] = { ...next[key], qty: q }
+      return next
+    })
+
   const clear = () => {
     setCart({})
     setKisCart({})
+    setPlatterCart({})
   }
 
   if (error) {
@@ -287,7 +325,7 @@ export default function CustomerPage() {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search pilau, chips mayai, kachumbari…"
+              placeholder="Search pilau, chips mayai, kachumbariâ€¦"
               className="w-full bg-transparent text-sm text-ink-900 outline-none placeholder:text-ink-400"
             />
             {query && (
@@ -304,7 +342,9 @@ export default function CustomerPage() {
           {/* Category chips */}
           <div className="hide-scroll -mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-0.5">
             <CatChip active={category === 'all'} onClick={() => setCategory('all')} label="All" />
-            {menu?.categories.map((c) => {
+            {menu?.categories
+            .filter((c) => c.id !== 'wl-platters')
+            .map((c) => {
               const Icon = getIcon(c.icon)
               return (
                 <CatChip
@@ -333,7 +373,7 @@ export default function CustomerPage() {
               <div className="pointer-events-none absolute -bottom-20 right-1/3 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
               <div className="relative max-w-lg">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur">
-                  <Clock className="h-3 w-3" /> Open now · 08:00 – 23:00
+                  <Clock className="h-3 w-3" /> Open now Â· 08:00 â€“ 23:00
                 </span>
                 <h2 className="font-display mt-3 text-xl font-extrabold leading-tight text-white sm:text-2xl md:text-3xl">
                   Karibu Willis Lounge.
@@ -341,7 +381,7 @@ export default function CustomerPage() {
                   Bar, grill & kitchen.
                 </h2>
                 <p className="mt-2 max-w-md text-[13px] leading-relaxed text-white/85 sm:text-sm">
-                  Order from your table — nyama choma, pilau, chips mayai and more.
+                  Order from your table â€” nyama choma, pilau, chips mayai and more.
                   Freshly prepared, delivered to your seat.
                 </p>
                 <div className="mt-4 flex flex-wrap items-center gap-3 text-[12px] font-semibold text-white/90">
@@ -349,7 +389,7 @@ export default function CustomerPage() {
                     <Star className="h-3.5 w-3.5 fill-white text-white" /> 4.8 rating
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5" /> 15–25 min
+                    <Clock className="h-3.5 w-3.5" /> 15â€“25 min
                   </span>
                   <span className="inline-flex items-center gap-1.5">
                     <MapPin className="h-3.5 w-3.5" /> Mikocheni B
@@ -361,7 +401,7 @@ export default function CustomerPage() {
         )}
 
         {/* ============ KISINIA ENTRY ============ */}
-        {menu?.kisinia?.enabled && (
+        {false && menu?.kisinia?.enabled && (
           <motion.button
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -376,24 +416,87 @@ export default function CustomerPage() {
             <span className="relative min-w-0 flex-1">
               <span className="flex flex-wrap items-center gap-2">
                 <span className="font-display text-base font-extrabold text-ink-900 sm:text-lg">
-                  {menu.kisinia.title}
+                  {(menu?.kisinia as any).title}
                 </span>
                 <span className="rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
                   Shared platter
                 </span>
               </span>
               <span className="mt-0.5 block truncate text-[12.5px] text-ink-500">
-                {menu.kisinia.blurb}
+                {(menu?.kisinia as any).blurb}
               </span>
-              <span className="mt-1 block text-[12px] font-bold text-brand-600">
-                From {money(currency, Math.min(...menu.kisinia.sizes.map((s) => s.price)))} ·{' '}
-                {menu.kisinia.sizes.map((s) => s.name).join(' · ')}
-              </span>
+                <span className="mt-1 block text-[12px] font-bold text-brand-600">
+                  From {money(currency, Math.min(...((menu?.kisinia as any).sizes || []).map((s: any) => s.price)))} ·{' '}
+                  {((menu?.kisinia as any).sizes || []).map((s: any) => s.name).join(' · ')}
+                </span>
             </span>
             <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white transition-transform group-hover:translate-x-0.5">
               <ArrowRight className="h-4 w-4" />
             </span>
           </motion.button>
+        )}
+
+        {/* ============ PLATTERS ============ */}
+        {!query && category === 'all' && menu && (
+          (() => {
+            const platters = menu.items.filter((i) => i.category === 'wl-platters' && i.available)
+            if (platters.length === 0) return null
+            return (
+              <section className="mt-6">
+                <div className="mb-3 flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-brand-600">
+                      Platters
+                    </p>
+                    <h2 className="font-display text-lg font-extrabold text-ink-900 sm:text-xl">
+                      Choose a platter & sides
+                    </h2>
+                  </div>
+                </div>
+                <div className="hide-scroll -mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
+                  {platters.map((platter) => {
+                    const PIcon = getIcon(platter.icon)
+                    const inc = (platter as any).sidesIncluded ?? 0
+                    return (
+                      <button
+                        key={platter.id}
+                        onClick={() => {
+                          setActivePlatter(platter)
+                          setPlatterOpen(true)
+                        }}
+                        className="group relative w-[260px] shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lift"
+                      >
+                        <div className="flex items-center gap-3 p-3.5">
+                          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-500 text-white">
+                            <PIcon className="h-5 w-5" />
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[13px] font-extrabold text-ink-900">{platter.name}</p>
+                            <p className="text-[12px] font-bold text-brand-600">
+                              {money(currency, platter.price)}
+                            </p>
+                            {inc > 0 && (
+                              <p className="mt-0.5 text-[11px] text-ink-500">
+                                {inc} side{inc === 1 ? '' : 's'} included
+                              </p>
+                            )}
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-ink-400 transition-transform group-hover:translate-x-0.5" />
+                        </div>
+                        {platter.description && (
+                          <div className="border-t border-slate-100 px-3.5 py-2">
+                            <p className="line-clamp-2 text-[11.5px] leading-snug text-ink-500">
+                              {platter.description}
+                            </p>
+                          </div>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </section>
+            )
+          })()
         )}
 
         {/* ============ TRACKER ============ */}
@@ -498,15 +601,24 @@ export default function CustomerPage() {
       </AnimatePresence>
 
       {/* ============ KISINIA BUILDER ============ */}
-      {menu?.kisinia && (
+      {false && menu?.kisinia && ((menu?.kisinia as any) as any).enabled && (
         <KisiniaBuilder
           open={kisOpen}
           onClose={() => setKisOpen(false)}
-          config={menu.kisinia}
+          config={(menu?.kisinia as any) as any}
           currency={currency}
           onAdd={addKisinia}
         />
       )}
+
+      <PlatterPicker
+        open={platterOpen}
+        onClose={() => setPlatterOpen(false)}
+        platter={activePlatter}
+        sides={(menu?.items || []).filter((i) => i.category === 'wl-sides' && (i as any).available !== false)}
+        currency={currency}
+        onAdd={addPlatter}
+      />
 
       {/* ============ CART SHEET ============ */}
       <CartSheet
@@ -514,6 +626,7 @@ export default function CustomerPage() {
         onClose={() => setCartOpen(false)}
         cart={cart}
         kisCart={kisCart}
+        platterCart={platterCart}
         menu={menu}
         currency={currency}
         tables={tables}
@@ -523,6 +636,8 @@ export default function CustomerPage() {
         dec={dec}
         incKis={incKis}
         decKis={decKis}
+        incPlatter={incPlatter}
+        decPlatter={decPlatter}
         clear={clear}
         onPlaced={(o) => {
           const codes = [o.code, ...history.map((h) => h.code)].slice(0, 20)
@@ -555,7 +670,7 @@ export default function CustomerPage() {
                 <div className="min-w-0 flex-1">
                   <p className="font-display text-sm font-extrabold text-ink-900">{o.code}</p>
                   <p className="text-[12px] text-ink-500">
-                    Table {o.table} · {o.items.length} items ·{' '}
+                    Table {o.table} Â· {o.items.length} items Â·{' '}
                     {new Date(o.createdAt).toLocaleDateString('en-GB', {
                       day: '2-digit',
                       month: 'short',
@@ -612,6 +727,7 @@ function CartSheet({
   onClose,
   cart,
   kisCart,
+  platterCart,
   menu,
   currency,
   tables,
@@ -621,6 +737,8 @@ function CartSheet({
   dec,
   incKis,
   decKis,
+  incPlatter,
+  decPlatter,
   clear,
   onPlaced,
 }: {
@@ -628,6 +746,7 @@ function CartSheet({
   onClose: () => void
   cart: Record<string, number>
   kisCart: Record<string, KisiniaCartLine>
+  platterCart?: Record<string, { itemId: string; sides: string[]; qty: number }>
   menu: MenuResponse | null
   currency: string
   tables: number
@@ -637,6 +756,8 @@ function CartSheet({
   dec: (id: string) => void
   incKis: (key: string) => void
   decKis: (key: string) => void
+  incPlatter?: (key: string) => void
+  decPlatter?: (key: string) => void
   clear: () => void
   onPlaced: (o: Order) => void
 }) {
@@ -679,15 +800,31 @@ function CartSheet({
       )
   }, [kisCart, menu?.kisinia])
 
+  const platterLines = useMemo(() => {
+    if (!menu) return []
+    const map = new Map(menu.items.map((i) => [i.id, i]))
+    const sideMap = new Map(menu.items.filter((i) => i.category === 'wl-sides').map((i) => [i.id, i]))
+    return Object.entries(platterCart || {})
+      .map(([key, l]) => {
+        const item = map.get(l.itemId)
+        if (!item) return null
+        const sides = (l.sides || []).map((sid) => sideMap.get(sid)).filter(Boolean) as MenuItem[]
+        const note = sides.length ? `Sides: ${sides.map((s) => s.name).join(', ')}` : ''
+        return { key, item, note, qty: l.qty }
+      })
+      .filter(Boolean) as { key: string; item: MenuItem; note: string; qty: number }[]
+  }, [platterCart, menu])
+
   const subtotal =
     lines.reduce((s, l) => s + l.item.price * l.qty, 0) +
-    kisLines.reduce((s, l) => s + l.quote.unitPrice * l.line.qty, 0)
+    kisLines.reduce((s, l) => s + l.quote.unitPrice * l.line.qty, 0) +
+    platterLines.reduce((s, l) => s + l.item.price * l.qty, 0)
   const service = Math.round(subtotal * 0.05)
   const total = subtotal + service
 
   async function submit() {
     if (!table) return toast('Please select your table first', 'error')
-    if (lines.length === 0 && kisLines.length === 0)
+    if (lines.length === 0 && kisLines.length === 0 && platterLines.length === 0)
       return toast('Your cart is empty', 'error')
     setBusy(true)
     try {
@@ -705,6 +842,11 @@ function CartSheet({
             sizeId: l.line.sizeId,
             picks: l.line.picks,
             qty: l.line.qty,
+          })),
+          ...platterLines.map((l) => ({
+            id: l.item.id,
+            qty: l.qty,
+            note: l.note.slice(0, 140) || undefined,
           })),
         ],
         note: note.trim(),
@@ -726,10 +868,49 @@ function CartSheet({
   return (
     <Sheet open={open} onClose={onClose} title="Your order">
       <div className="flex flex-col gap-5 p-5">
-        {lines.length === 0 && kisLines.length === 0 ? (
+        {lines.length === 0 && kisLines.length === 0 && platterLines.length === 0 ? (
           <EmptyState>Your cart is empty. Add something tasty.</EmptyState>
         ) : (
           <ul className="flex flex-col gap-2.5">
+            {platterLines.map(({ key, item, note, qty }) => {
+              const PIcon = getIcon(item.icon)
+              return (
+                <li
+                  key={key}
+                  className="flex items-start gap-3 rounded-2xl border border-brand-200 bg-brand-50/50 p-2.5"
+                >
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-500 text-white">
+                    <PIcon className="h-5 w-5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[13px] font-bold text-ink-900">{item.name}</p>
+                    {note && <p className="mt-0.5 text-[11.5px] leading-snug text-ink-500">{note}</p>}
+                    <p className="mt-0.5 text-[12px] font-semibold text-brand-600">
+                      {money(currency, item.price)} each
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-0.5 rounded-xl border border-brand-200 bg-white p-0.5">
+                    <button
+                      onClick={() => decPlatter?.(key)}
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 hover:bg-brand-50 hover:text-brand-600"
+                    >
+                      <Minus className="h-3.5 w-3.5" />
+                    </button>
+                    <span className="w-5 text-center text-sm font-bold text-ink-900">{qty}</span>
+                    <button
+                      onClick={() => incPlatter?.(key)}
+                      className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 hover:bg-brand-50 hover:text-brand-600"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <span className="w-16 shrink-0 text-right text-[12px] font-extrabold text-ink-900 sm:w-20 sm:text-[13px]">
+                    {money(currency, item.price * qty)}
+                  </span>
+                </li>
+              )
+            })}
+
             {kisLines.map(({ key, line, quote }) => (
               <li
                 key={key}
@@ -740,7 +921,7 @@ function CartSheet({
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-[13px] font-bold text-ink-900">
-                    {menu?.kisinia?.title ?? 'Kisinia'} · {quote.sizeName}
+                    {menu?.kisinia?.title ?? 'Kisinia'} Â· {quote.sizeName}
                   </p>
                   <p className="mt-0.5 text-[11.5px] leading-snug text-ink-500">
                     {quote.picks.length
@@ -803,7 +984,7 @@ function CartSheet({
                         <input
                           value={lineNotes[item.id] ?? ''}
                           onChange={(e) => setLineNote(item.id, e.target.value)}
-                          placeholder="Which soda? e.g. Coca-Cola, Fanta, Sprite…"
+                          placeholder="Which soda? e.g. Coca-Cola, Fanta, Spriteâ€¦"
                           aria-label={`Soda preference for ${item.name}`}
                           className="input py-1.5 text-[11.5px]"
                         />
@@ -860,7 +1041,7 @@ function CartSheet({
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
-            placeholder="No chilli, extra kachumbari…"
+            placeholder="No chilli, extra kachumbariâ€¦"
             className="input resize-none"
           />
         </div>
@@ -881,17 +1062,17 @@ function CartSheet({
       <div className="sticky bottom-0 border-t border-slate-100 bg-white/95 p-4 backdrop-blur-xl">
         <button
           onClick={submit}
-          disabled={busy || (lines.length === 0 && kisLines.length === 0)}
+          disabled={busy || (lines.length === 0 && kisLines.length === 0 && platterLines.length === 0)}
           className="btn-primary w-full px-3 py-3.5 text-[13px] sm:text-base"
         >
           {busy ? (
             <>
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-              Sending…
+              Sendingâ€¦
             </>
           ) : table ? (
             <>
-              Place order · Table {table} · {money(currency, total)}
+              Place order Â· Table {table} Â· {money(currency, total)}
             </>
           ) : (
             <>Select a table to continue</>

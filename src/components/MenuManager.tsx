@@ -126,7 +126,7 @@ export default function MenuManager({ items, categories, currency, onChanged }: 
 
     setBusy(true)
     try {
-      const payload = {
+      const payload: any = {
         name: form.name.trim(),
         description: form.description.trim(),
         price: Math.round(price),
@@ -137,6 +137,11 @@ export default function MenuManager({ items, categories, currency, onChanged }: 
           .split(',')
           .map((t) => t.trim())
           .filter(Boolean),
+      }
+      if ((form as any).sidesIncluded !== undefined && (form as any).sidesIncluded !== '' && (form as any).sidesIncluded !== null) {
+        payload.sidesIncluded = Number((form as any).sidesIncluded)
+      } else if ((form as any).sidesIncluded === null) {
+        payload.sidesIncluded = null
       }
 
       if (form.id) {
@@ -258,7 +263,9 @@ export default function MenuManager({ items, categories, currency, onChanged }: 
                             icon: item.icon,
                             image: item.image ?? '',
                             tags: item.tags.join(', '),
-                          })}
+                            available: item.available,
+                            sidesIncluded: (item as any).sidesIncluded,
+                          } as any)}
                           className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[11px] font-semibold text-slate-600 transition hover:bg-slate-50"
                         >
                           <Pencil className="h-3 w-3" /> Edit
@@ -386,6 +393,20 @@ export default function MenuManager({ items, categories, currency, onChanged }: 
                     rows={2}
                     placeholder="A short, tasty description…"
                     className="input resize-none"
+                  />
+                </Field>
+
+                <Field label="Included sides (platters)">
+                  <input
+                    type="number"
+                    min={0}
+                    max={6}
+                    value={(form as any).sidesIncluded ?? ''}
+                    onChange={(e) =>
+                      setForm({ ...(form as any), sidesIncluded: e.target.value === '' ? undefined : Number(e.target.value) })
+                    }
+                    placeholder="e.g. 2"
+                    className="input"
                   />
                 </Field>
 

@@ -13,6 +13,7 @@ export interface MenuItem {
   prepMinutes?: number
   gradient: string
   available: boolean
+  sidesIncluded?: number
 }
 
 export interface MenuCategory {
