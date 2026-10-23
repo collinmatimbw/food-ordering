@@ -255,6 +255,15 @@ export default function CustomerPage() {
       .filter((s) => s.items.length > 0)
   }, [menu, visible, category])
 
+  // Photos for the hero slideshow (dishes that have an uploaded picture)
+  const heroPhotos = useMemo(() => {
+    if (!menu) return []
+    return menu.items
+      .filter((i) => i.image && i.available)
+      .slice(0, 12)
+      .map((i) => ({ id: i.id, name: i.name, image: i.image!, icon: i.icon, gradient: i.gradient }))
+  }, [menu])
+
   const count =
     Object.values(cart).reduce((a, b) => a + b, 0) +
     Object.values(kisCart).reduce((a, l) => a + l.qty, 0) +
@@ -542,6 +551,29 @@ export default function CustomerPage() {
                   </span>
                 </div>
               </div>
+
+              {/* Food photo slideshow — scrolls right to left */}
+              {heroPhotos.length > 0 && (
+                <div
+                  className="relative mt-6 -mx-5 -mb-5 sm:-mx-8 sm:-mb-8 [mask-image:linear-gradient(to_right,transparent,black_7%,black_93%,transparent)]"
+                  aria-hidden
+                >
+                  <div className="flex w-max animate-heroScroll gap-3 px-5 motion-reduce:animate-none sm:gap-4 sm:px-8">
+                    {[...heroPhotos, ...heroPhotos].map((p, idx) => (
+                      <DishImage
+                        key={`${p.id}-${idx}`}
+                        src={p.image}
+                        icon={p.icon}
+                        gradient={p.gradient}
+                        alt={p.name}
+                        eager
+                        iconSize="h-8 w-8"
+                        className="h-20 w-28 shrink-0 rounded-xl ring-1 ring-white/20 sm:h-24 sm:w-36"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </motion.section>
         )}

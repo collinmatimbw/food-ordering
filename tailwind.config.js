@@ -58,6 +58,10 @@ export default {
           '50%': { transform: 'translateX(20%)' },
           '100%': { transform: 'translateX(110%)' },
         },
+        heroScroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
       },
       animation: {
         floaty: 'floaty 6s ease-in-out infinite',
@@ -66,6 +70,7 @@ export default {
         marquee: 'marquee 2.4s ease-in-out infinite',
         riseIn: 'riseIn 0.45s cubic-bezier(0.22,1,0.36,1) both',
         barSweep: 'barSweep 1.3s ease-in-out infinite',
+        heroScroll: 'heroScroll 35s linear infinite',
       },
     },
   },
