@@ -16,6 +16,7 @@ import {
   ArrowRight,
   Armchair,
   Bike,
+  Phone,
 } from 'lucide-react'
 import { fetchMenu, fetchOrder, placeOrder, trackOrders } from '../api'
 import type { MenuResponse, Order, KisiniaCartLine, KisiniaConfig, MenuItem, OrderType } from '../types'
@@ -33,11 +34,29 @@ import { Sheet } from '../components/TablePicker'
 import PlatterPicker from '../components/PlatterPicker'
 import DishImage from '../components/DishImage'
 import Splash from '../components/Splash'
+import PhoneGate from '../components/PhoneGate'
 
 const CART_KEY = 'savor.cart'
 const TABLE_KEY = 'savor.table'
 const TRACK_PHONE_KEY = 'savor.trackPhone'
+const USER_PHONE_KEY = 'savor.userPhone'
 const KISINIA_CART_KEY = 'savor.kisinia'
+
+/** Phone number entered at the gate — used as this user's ID. */
+function readUserPhone(): string {
+  try {
+    return (localStorage.getItem(USER_PHONE_KEY) || '').trim()
+  } catch {
+    return ''
+  }
+}
+
+function writeUserPhone(phone: string) {
+  try {
+    if (phone) localStorage.setItem(USER_PHONE_KEY, phone)
+    else localStorage.removeItem(USER_PHONE_KEY)
+  } catch {}
+}
 
 /** Last phone number used to track orders (tracking is phone-only). */
 function readTrackedPhone(): string {
@@ -94,7 +113,9 @@ export default function CustomerPage() {
     const n = Number(q)
     return q && Number.isFinite(n) && n > 0 ? n : null
   })
-  const [phone, setPhone] = useState('')
+  const [phone, setPhone] = useState(() => readUserPhone())
+  const [identified, setIdentified] = useState(() => Boolean(readUserPhone()))
+  const [gateOpen, setGateOpen] = useState(false)
   const [address, setAddress] = useState('')
   const [table, setTable] = useState<number | null>(() => {
     const q = new URLSearchParams(window.location.search).get('table')
@@ -127,9 +148,9 @@ export default function CustomerPage() {
     if (table) localStorage.setItem(TABLE_KEY, String(table))
   }, [table])
 
-  // My orders list = every order placed with the tracked phone number
+  // My orders list = every order placed with this user's phone ID
   async function loadMyOrders() {
-    const saved = readTrackedPhone()
+    const saved = readUserPhone() || readTrackedPhone()
     if (saved && !trackPhone) setTrackPhone(saved)
     if (!saved) {
       setHistory([])
@@ -137,6 +158,21 @@ export default function CustomerPage() {
     }
     try {
       const list = await trackOrders(saved)
+      setHistory(list)
+    } catch {
+      /* ignore */
+    }
+  }
+
+  // Save the phone as this user's ID and pull up their orders
+  async function acceptPhone(value: string) {
+    writeUserPhone(value)
+    setPhone(value)
+    setTrackPhone(value)
+    setIdentified(true)
+    setGateOpen(false)
+    try {
+      const list = await trackOrders(value)
       setHistory(list)
     } catch {
       /* ignore */
@@ -319,6 +355,8 @@ export default function CustomerPage() {
         return
       }
       writeTrackedPhone(phoneValue)
+      writeUserPhone(phoneValue)
+      setPhone(phoneValue)
       setHistory(list)
       setActiveOrder(list[0])
       setHistoryOpen(false)
@@ -357,6 +395,17 @@ export default function CustomerPage() {
         {!menu && <Splash key="customer-splash" />}
       </AnimatePresence>
 
+      {/* ============ PHONE ID GATE ============ */}
+      <AnimatePresence>
+        {(gateOpen || (!identified && menu)) && (
+          <PhoneGate
+            key="phone-gate"
+            initial={phone}
+            onSubmit={acceptPhone}
+          />
+        )}
+      </AnimatePresence>
+
       {/* ============ HEADER ============ */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
@@ -381,6 +430,18 @@ export default function CustomerPage() {
 
             {/* Actions */}
             <div className="ml-auto flex shrink-0 items-center gap-2">
+              {identified && (
+                <button
+                  onClick={() => setGateOpen(true)}
+                  className="btn-ghost px-2.5 text-[13px] sm:px-3"
+                  title="Your ID — tap to change"
+                >
+                  <Phone className="h-4 w-4 text-brand-600" />
+                  <span className="max-w-[7rem] truncate font-semibold text-ink-900">
+                    {phone}
+                  </span>
+                </button>
+              )}
               <button
                 onClick={() => setHistoryOpen(true)}
                 className="btn-ghost relative px-3 text-sm sm:px-4"
@@ -835,6 +896,11 @@ export default function CustomerPage() {
         onPlaced={(o) => {
           // Checkout never adds to "My orders" — orders appear only after
           // the customer tracks them with their phone number.
+          if (o.phone) {
+            writeUserPhone(o.phone)
+            setPhone(o.phone)
+            setIdentified(true)
+          }
           setActiveOrder(o)
         }}
       />
@@ -1312,7 +1378,7 @@ function CartSheet({
 
         <div className="flex flex-col gap-2">
           <label className="text-[11px] font-bold uppercase tracking-widest text-ink-400">
-            Phone number
+            Your phone (ID)
           </label>
           <input
             value={phone}
@@ -1322,7 +1388,8 @@ function CartSheet({
             className="input"
           />
           <p className="text-[11.5px] text-ink-400">
-            You'll use this number to track your order.
+            This number is your ID — orders are linked to it so you can track
+            them anytime.
           </p>
         </div>
 
