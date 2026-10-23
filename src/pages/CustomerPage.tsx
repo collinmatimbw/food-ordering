@@ -524,6 +524,31 @@ export default function CustomerPage() {
             className="mt-5"
           >
             <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 via-brand-700 to-brand-500 p-5 sm:p-8">
+              {/* Food photo background — slides right to left */}
+              {heroPhotos.length > 0 && (
+                <div className="absolute inset-0" aria-hidden>
+                  <div
+                    className="flex h-full w-max animate-heroScroll motion-reduce:animate-none"
+                    style={{ animationDuration: `${Math.max(30, heroPhotos.length * 6)}s` }}
+                  >
+                    {[...heroPhotos, ...heroPhotos].map((p, idx) => (
+                      <DishImage
+                        key={`${p.id}-${idx}`}
+                        src={p.image}
+                        icon={p.icon}
+                        gradient={p.gradient}
+                        alt=""
+                        eager
+                        iconSize="h-16 w-16"
+                        className="h-full w-[80vw] shrink-0 sm:w-[500px]"
+                      />
+                    ))}
+                  </div>
+                  {/* Readability overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-900/75 to-brand-900/45" />
+                </div>
+              )}
+
               <div className="pointer-events-none absolute -right-10 -top-16 h-56 w-56 rounded-full bg-white/15 blur-2xl" />
               <div className="pointer-events-none absolute -bottom-20 right-1/3 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
               <div className="relative max-w-lg">
@@ -551,29 +576,6 @@ export default function CustomerPage() {
                   </span>
                 </div>
               </div>
-
-              {/* Food photo slideshow — scrolls right to left */}
-              {heroPhotos.length > 0 && (
-                <div
-                  className="relative mt-6 -mx-5 -mb-5 sm:-mx-8 sm:-mb-8 [mask-image:linear-gradient(to_right,transparent,black_7%,black_93%,transparent)]"
-                  aria-hidden
-                >
-                  <div className="flex w-max animate-heroScroll gap-3 px-5 motion-reduce:animate-none sm:gap-4 sm:px-8">
-                    {[...heroPhotos, ...heroPhotos].map((p, idx) => (
-                      <DishImage
-                        key={`${p.id}-${idx}`}
-                        src={p.image}
-                        icon={p.icon}
-                        gradient={p.gradient}
-                        alt={p.name}
-                        eager
-                        iconSize="h-8 w-8"
-                        className="h-20 w-28 shrink-0 rounded-xl ring-1 ring-white/20 sm:h-24 sm:w-36"
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </motion.section>
         )}
