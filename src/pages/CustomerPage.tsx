@@ -32,6 +32,7 @@ import TablePicker from '../components/TablePicker'
 import { Sheet } from '../components/TablePicker'
 import PlatterPicker from '../components/PlatterPicker'
 import DishImage from '../components/DishImage'
+import Splash from '../components/Splash'
 
 const CART_KEY = 'savor.cart'
 const TABLE_KEY = 'savor.table'
@@ -332,6 +333,10 @@ export default function CustomerPage() {
   if (error) {
     return (
       <div className="flex min-h-screen items-center justify-center p-6">
+        {/* fade the loading splash out over the error card */}
+        <AnimatePresence>
+          {!menu && !error && <Splash key="customer-splash" />}
+        </AnimatePresence>
         <div className="card max-w-sm p-8 text-center shadow-card">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
             <SearchX className="h-7 w-7" />
@@ -347,6 +352,11 @@ export default function CustomerPage() {
 
   return (
     <div className="min-h-screen pb-28">
+      {/* ============ LOADING SPLASH ============ */}
+      <AnimatePresence>
+        {!menu && <Splash key="customer-splash" />}
+      </AnimatePresence>
+
       {/* ============ HEADER ============ */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">

@@ -53,6 +53,11 @@ export default {
           '0%': { transform: 'translateY(14px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        barSweep: {
+          '0%': { transform: 'translateX(-110%)' },
+          '50%': { transform: 'translateX(20%)' },
+          '100%': { transform: 'translateX(110%)' },
+        },
       },
       animation: {
         floaty: 'floaty 6s ease-in-out infinite',
@@ -60,6 +65,7 @@ export default {
         shimmer: 'shimmer 1.6s infinite',
         marquee: 'marquee 2.4s ease-in-out infinite',
         riseIn: 'riseIn 0.45s cubic-bezier(0.22,1,0.36,1) both',
+        barSweep: 'barSweep 1.3s ease-in-out infinite',
       },
     },
   },

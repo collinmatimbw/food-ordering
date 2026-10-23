@@ -8,6 +8,7 @@ import { toast, ToastHost } from '../components/Toasts'
 import MenuManager from '../components/MenuManager'
 import KisiniaManager from '../components/KisiniaManager'
 import OfficeLock from '../components/OfficeLock'
+import Splash from '../components/Splash'
 import { getIcon } from '../icons'
 import { money } from '../utils'
 import {
@@ -369,6 +370,11 @@ export default function OfficePage() {
 
   return (
     <div className="min-h-screen">
+      {/* ============ LOADING SPLASH ============ */}
+      <AnimatePresence>
+        {loading && <Splash key="office-splash" label="Opening the office…" />}
+      </AnimatePresence>
+
       {/* Ambient background décor */}
       <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-32 right-[-8%] h-[26rem] w-[26rem] rounded-full bg-brand-100/50 blur-3xl" />

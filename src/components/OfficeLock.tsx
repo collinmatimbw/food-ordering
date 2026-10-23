@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Lock, Loader2 } from 'lucide-react'
 import { getOfficeKey, setOfficeKey, verifyOfficeKey } from '../api'
+import { hideBootSplash } from './Splash'
 
 export default function OfficeLock({ onUnlock }: { onUnlock: () => void }) {
   const [value, setValue] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => hideBootSplash(), [])
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
