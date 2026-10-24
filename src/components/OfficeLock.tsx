@@ -38,12 +38,9 @@ export default function OfficeLock({ onUnlock }: { onUnlock: () => void }) {
         onSubmit={submit}
         className="card w-full max-w-sm p-8 text-center shadow-card"
       >
-        <img
-          src="/logo/logoo.png"
-          alt=""
-          className="mx-auto h-14 w-auto object-contain"
-          draggable={false}
-        />
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+          <Lock className="h-7 w-7" />
+        </div>
         <h1 className="font-display mt-4 text-xl font-extrabold text-ink-900">Staff access</h1>
         <p className="mt-1 text-[13px] text-ink-500">
           Enter the office key to open the Willis Lounge dashboard.

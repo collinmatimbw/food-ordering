@@ -327,7 +327,7 @@ export default function OfficePage() {
     tables: { title: 'Tables', sub: 'Floor occupancy and running totals' },
     reports: { title: 'Reports', sub: 'Sales snapshot and best sellers' },
     menu: { title: 'Menu Manager', sub: 'Add, edit and curate the customer menu' },
-    kisinia: { title: 'Kisinia', sub: 'Kisinia builder sizes and components' },
+    kisinia: { title: 'Kisinia', sub: 'Platter builder sizes and components' },
   }
 
   const totalTables = menu?.restaurant.tables ?? 0
@@ -1361,12 +1361,9 @@ function SidebarContent({
   return (
     <div className="flex h-full w-[272px] flex-col bg-gradient-to-b from-[#14352F] via-[#0C2A25] to-[#051F1B] px-4 py-6 text-white shadow-sheet">
       <div className="flex items-center gap-2.5 px-2">
-        <img
-          src="/logo/logoo.png"
-          alt=""
-          className="h-10 w-auto shrink-0 object-contain"
-          draggable={false}
-        />
+        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-300 to-brand-500 text-brand-900 shadow-brand">
+          <Building2 className="h-5 w-5" />
+        </div>
         <div>
           <p className="font-display text-[15px] font-extrabold leading-none">Willis Lounge</p>
           <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/40">

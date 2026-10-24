@@ -79,13 +79,13 @@ export default function KisiniaBuilder({
         <p className="text-[13px] leading-relaxed text-ink-500">{config.blurb}</p>
 
         {/* Choose the path (exclusive) */}
-        <section aria-label="Choose how to build your kisinia">
+        <section aria-label="Choose how to build your platter">
           <div className="grid grid-cols-2 gap-2.5">
             <ChoiceTile
               active={mode === 'size'}
               onClick={() => setMode('size')}
               Icon={Users}
-              title="Kisinia size"
+              title="Platter size"
               sub="Choose by people count"
             />
             <ChoiceTile
@@ -136,7 +136,7 @@ export default function KisiniaBuilder({
             </div>
             <p className="mt-2.5 flex items-start gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-[11.5px] leading-snug text-ink-500">
               <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-500" />
-              Just pick how many people — our kitchen fills the kisinia with its best dishes. No
+              Just pick how many people — our kitchen fills the platter with its best dishes. No
               food picking needed.
             </p>
           </section>
@@ -263,7 +263,7 @@ export default function KisiniaBuilder({
             <div className="flex items-center gap-0.5 rounded-xl border border-slate-200 bg-white p-0.5">
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                aria-label="Fewer kisinia"
+                aria-label="Fewer platters"
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 transition hover:bg-slate-100"
               >
                 <Minus className="h-3.5 w-3.5" strokeWidth={2.5} />
@@ -271,7 +271,7 @@ export default function KisiniaBuilder({
               <span className="w-5 text-center text-sm font-bold text-ink-900">{qty}</span>
               <button
                 onClick={() => setQty((q) => Math.min(10, q + 1))}
-                aria-label="More kisinia"
+                aria-label="More platters"
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 transition hover:bg-slate-100"
               >
                 <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />

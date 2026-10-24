@@ -68,9 +68,7 @@ export async function verifyOfficeKey(): Promise<boolean> {
   }
 }
 
-// Public menu endpoint — give a cold Render start a fair chance, but never
-export const fetchMenu = () =>
-  request<MenuResponse>(`${BASE}/menu`, { signal: AbortSignal.timeout(20_000) })
+export const fetchMenu = () => request<MenuResponse>(`${BASE}/menu`)
 
 export const fetchOrders = () => officeRequest<Order[]>(`${BASE}/orders`)
 

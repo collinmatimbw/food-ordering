@@ -72,7 +72,7 @@ export default function PlatterPicker({
         reset()
         onClose()
       }}
-      title="Kisinia selection"
+      title="Platter selection"
     >
       <div className="flex h-full flex-col">
         <div className="flex items-start gap-3 px-5 pb-4 pt-1">
