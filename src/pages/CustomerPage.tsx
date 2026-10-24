@@ -328,7 +328,7 @@ export default function CustomerPage() {
       ...k,
       [key]: { ...line, qty: (k[key]?.qty ?? 0) + line.qty },
     }))
-    toast('Kisinia platter added to cart', 'success')
+    toast('Kisinia added to cart', 'success')
   }
   const incKis = (key: string) =>
     setKisCart((k) => (k[key] ? { ...k, [key]: { ...k[key], qty: k[key].qty + 1 } } : k))
@@ -349,7 +349,7 @@ export default function CustomerPage() {
       ...p,
       [key]: { itemId: platter.id, sides: sideIds, qty: (p[key]?.qty ?? 0) + qty },
     }))
-    toast(`${platter.name} added to cart`, 'success')
+    toast(`${item.name} kisinia added to cart`, 'success')
   }
   const incPlatter = (key: string) =>
     setPlatterCart((p) => (p[key] ? { ...p, [key]: { ...p[key], qty: p[key].qty + 1 } } : p))
@@ -436,16 +436,19 @@ export default function CustomerPage() {
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
-            {/* Brand */}
-            <div className="flex min-w-0 items-center gap-2.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white shadow-brand">
-                <ShoppingBag className="h-5 w-5" strokeWidth={2.25} />
-              </div>
+            {/* Logo brand */}
+            <div className="flex min-w-0 items-center gap-2">
+              <img
+                src="/logo/logoo.png"
+                alt=""
+                className="h-14 w-auto shrink-0 object-contain"
+                draggable={false}
+              />
               <div className="min-w-0 leading-none">
-                <h1 className="font-display truncate text-[15px] font-extrabold tracking-tight text-ink-900 sm:text-[17px]">
-                  {menu?.restaurant.name ?? 'Willis Lounge'}
+                <h1 className="font-display truncate text-[14px] font-extrabold tracking-tight text-ink-900 sm:text-[16px]">
+                  {menu?.restaurant.name ?? 'Willis Lounge Bar & Grill'}
                 </h1>
-                <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-ink-500">
+                <p className="mt-0.5 flex items-center gap-1 text-[10.5px] font-medium text-ink-500">
                   <MapPin className="h-3 w-3 shrink-0 text-brand-500" />
                   <span className="truncate">
                     {menu?.restaurant.tagline ?? 'Dar es Salaam'}
@@ -480,14 +483,6 @@ export default function CustomerPage() {
                   </span>
                 )}
               </button>
-              <a
-                href="#/office"
-                className="btn-ghost hidden px-4 text-sm sm:inline-flex"
-                title="Office dashboard"
-              >
-                <Building2 className="h-4 w-4" />
-                <span>Office</span>
-              </a>
             </div>
           </div>
 
@@ -720,7 +715,7 @@ export default function CustomerPage() {
                   {(menu?.kisinia as any).title}
                 </span>
                 <span className="rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-                  Shared platter
+                  Kisinia platter
                 </span>
               </span>
               <span className="mt-0.5 block truncate text-[12.5px] text-ink-500">
@@ -737,44 +732,44 @@ export default function CustomerPage() {
           </motion.button>
         )}
 
-        {/* ============ PLATTERS ============ */}
+        {/* ============ KISINIA ============ */}
         {!query && category === 'all' && menu && (
           (() => {
-            const platters = menu.items.filter((i) => i.category === 'wl-platters' && i.available)
-            if (platters.length === 0) return null
+            const kisinia = menu.items.filter((i) => i.category === 'wl-platters' && i.available)
+            if (kisinia.length === 0) return null
             return (
               <section className="mt-6">
                 <div className="mb-3 flex items-center justify-between">
                   <div>
                     <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-brand-600">
-                      Platters
+                      Kisinia
                     </p>
                     <h2 className="font-display text-lg font-extrabold text-ink-900 sm:text-xl">
-                      Choose a platter & sides
+                      Choose a kisinia & sides
                     </h2>
                   </div>
                 </div>
                 <div className="hide-scroll -mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
-                  {platters.map((platter) => {
-                    const PIcon = getIcon(platter.icon)
-                    const inc = (platter as any).sidesIncluded ?? 0
+                  {kisinia.map((item) => {
+                    const IIcon = getIcon(item.icon)
+                    const inc = (item as any).sidesIncluded ?? 0
                     return (
                       <button
-                        key={platter.id}
+                        key={item.id}
                         onClick={() => {
-                          setActivePlatter(platter)
+                          setActivePlatter(item)
                           setPlatterOpen(true)
                         }}
                         className="group relative w-[260px] shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lift"
                       >
                         <div className="flex items-center gap-3 p-3.5">
                           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-700 to-brand-500 text-white">
-                            <PIcon className="h-5 w-5" />
+                            <IIcon className="h-5 w-5" />
                           </span>
                           <div className="min-w-0 flex-1">
-                            <p className="text-[13px] font-extrabold text-ink-900">{platter.name}</p>
+                            <p className="text-[13px] font-extrabold text-ink-900">{item.name}</p>
                             <p className="text-[12px] font-bold text-brand-600">
-                              {money(currency, platter.price)}
+                              {money(currency, item.price)}
                             </p>
                             {inc > 0 && (
                               <p className="mt-0.5 text-[11px] text-ink-500">
@@ -784,10 +779,10 @@ export default function CustomerPage() {
                           </div>
                           <ArrowRight className="h-4 w-4 text-ink-400 transition-transform group-hover:translate-x-0.5" />
                         </div>
-                        {platter.description && (
+                        {item.description && (
                           <div className="border-t border-slate-100 px-3.5 py-2">
                             <p className="line-clamp-2 text-[11.5px] leading-snug text-ink-500">
-                              {platter.description}
+                              {item.description}
                             </p>
                           </div>
                         )}
@@ -1302,7 +1297,7 @@ function CartSheet({
                 <div className="flex shrink-0 items-center gap-0.5 rounded-xl border border-brand-200 bg-white p-0.5">
                   <button
                     onClick={() => decKis(key)}
-                    aria-label="Decrease platters"
+                    aria-label="Decrease kisinia"
                     className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 transition hover:bg-brand-50 hover:text-brand-600"
                   >
                     <Minus className="h-3.5 w-3.5" />
@@ -1310,7 +1305,7 @@ function CartSheet({
                   <span className="w-5 text-center text-sm font-bold text-ink-900">{line.qty}</span>
                   <button
                     onClick={() => incKis(key)}
-                    aria-label="Increase platters"
+                    aria-label="Increase kisinia"
                     className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 transition hover:bg-brand-50 hover:text-brand-600"
                   >
                     <Plus className="h-3.5 w-3.5" />

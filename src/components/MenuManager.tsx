@@ -450,7 +450,7 @@ export default function MenuManager({
                   />
                 </Field>
 
-                <Field label="Included sides (platters)">
+                <Field label="Included sides (kisinia)">
                   <input
                     type="number"
                     min={0}
