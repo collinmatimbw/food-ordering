@@ -11,3 +11,10 @@
     }
   ]
 }
+
+/*
+NOTES
+- The PWA files live at the published root: /manifest.json, /sw.js, /icons/*, /favicon.svg
+- If those paths return 404 after the next deploy, import the repo in the Vercel dashboard and deploy again from Git.
+- Do not point /api or /uploads at the Render backend for the PWA assets above.
+*/
