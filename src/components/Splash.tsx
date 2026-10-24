@@ -10,7 +10,7 @@ export function hideBootSplash() {
   window.setTimeout(() => boot.remove(), 500)
 }
 
-/** Full-screen Willis Lounge branded loading screen. */
+/** Full-screen Willis Lounge loading screen with logo. */
 export default function Splash({ label = 'Setting the table…' }: { label?: string }) {
   useEffect(() => hideBootSplash(), [])
 
@@ -34,31 +34,28 @@ export default function Splash({ label = 'Setting the table…' }: { label?: str
       />
 
       <div className="relative flex flex-col items-center text-center">
-        {/* Monogram */}
-        <div className="relative">
-          <span
-            aria-hidden
-            className="absolute inset-0 animate-ping rounded-3xl bg-brand-300/25 motion-reduce:animate-none"
-          />
-          <div className="relative flex h-24 w-24 animate-pop items-center justify-center rounded-3xl bg-gradient-to-br from-brand-300 to-brand-500 text-brand-900 shadow-brand motion-reduce:animate-none">
-            <span className="font-['Sora'] text-4xl font-extrabold tracking-tight">WL</span>
-          </div>
-        </div>
+        {/* Logo */}
+        <img
+          src="/logo/logoo.png"
+          alt=""
+          className="h-28 w auto object-contain"
+          draggable={false}
+        />
 
         {/* Wordmark */}
-        <h1 className="mt-7 animate-riseIn font-['Sora'] text-[30px] font-extrabold tracking-tight text-white motion-reduce:animate-none sm:text-4xl">
+        <h1 className="mt-5 font-['Sora'] text-[22px] font-extrabold tracking-tight text-white motion-reduce:animate-none sm:text-[28px]">
           WILLIS LOUNGE
         </h1>
-        <p className="mt-2.5 text-[10.5px] font-semibold uppercase tracking-[0.3em] text-brand-100/60">
+        <p className="mt-1 text-[10.5px] font-semibold uppercase tracking-[0.3em] text-brand-100/60">
           Bar &amp; Grill · Sinza Mapambano
         </p>
 
         {/* Progress shimmer */}
-        <div className="mt-8 h-1.5 w-52 overflow-hidden rounded-full bg-white/10 sm:w-60">
+        <div className="mt-6 h-1.5 w-44 overflow-hidden rounded-full bg-white/10 sm:w-52">
           <div className="h-full w-2/5 animate-barSweep rounded-full bg-gradient-to-r from-brand-300 to-amber-300 motion-reduce:animate-none" />
         </div>
 
-        <p className="mt-4 text-xs font-medium text-white/45">{label}</p>
+        <p className="mt-3 text-xs font-medium text-white/45">{label}</p>
       </div>
     </motion.div>
   )
