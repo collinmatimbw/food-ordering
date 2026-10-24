@@ -99,6 +99,7 @@ export default function CustomerPage() {
     Record<string, { itemId: string; sides: string[]; qty: number }>
   >({})
   const [activePlatter, setActivePlatter] = useState<MenuItem | null>(null)
+  const [platterOpen, setPlatterOpen] = useState(false)
   const [mode, setMode] = useState<OrderType>(() => {
     const t = new URLSearchParams(window.location.search).get('mode')
     if (t === 'delivery' || t === 'takeaway' || t === 'dine_in') return t
@@ -280,7 +281,7 @@ export default function CustomerPage() {
     if (!menu) return 0
     const map = new Map(menu.items.map((i) => [i.id, i.price]))
     return Object.values(kisiniaCart).reduce((s, l) => s + (map.get(l.itemId) ?? 0) * l.qty, 0)
-  }, [platterCart, menu])
+  }, [kisiniaCart, menu])
 
   const subtotal = useMemo(() => {
     if (!menu) return 0
@@ -323,7 +324,7 @@ export default function CustomerPage() {
       return next
     })
 
-  const addKisinia = (platter: MenuItem, sides: MenuItem[], qty: number) => {
+  const addPlatterKisinia = (platter: MenuItem, sides: MenuItem[], qty: number) => {
     const sideIds = sides.map((s) => s.id).sort()
     const key = `${platter.id}|${sideIds.join(',')}`
     setKisiniaCart((p) => ({
@@ -347,7 +348,7 @@ export default function CustomerPage() {
   const clear = () => {
     setCart({})
     setKisCart({})
-    setPlatterCart({})
+    setKisiniaCart({})
   }
 
   const trackLookup = async () => {
@@ -671,7 +672,7 @@ export default function CustomerPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.08 }}
-            onClick={() => setKisOpen(true)}
+            onClick={() => setPlatterOpen(true)}
             className="group relative mt-4 flex w-full items-center gap-4 overflow-hidden rounded-2xl border border-brand-200 bg-white p-4 text-left shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lift sm:p-5"
           >
             <span className="pointer-events-none absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-brand-100/80 to-transparent" />
@@ -778,7 +779,9 @@ export default function CustomerPage() {
 
         {/* ============ MENU ============ */}
         {!menu ? (
-          <GridSkeleton />
+          <div className="flex items-center justify-center py-20">
+            <div className="flex h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600" />
+          </div>
         ) : sections.length === 0 ? (
           <div className="flex flex-col items-center gap-3 py-20 text-center">
             <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-ink-400">
@@ -867,20 +870,26 @@ export default function CustomerPage() {
 
       {/* ============ KISINIA BUILDER ============ */}
       {false && menu?.kisinia && ((menu?.kisinia as any) as any).enabled && (
-        <KisiniaBuilder                    open={kisOpen}
-                    onClose={() => setKisOpen(false)}
-                    config={(menu?.kisinia as any) as any}
-                    currency={currency}
-                    onAdd={addKisinia}
-
+        <KisiniaBuilder
+          open={platterOpen}
+          onClose={() => setPlatterOpen(false)}
+          config={(menu?.kisinia as any) as any}
+          currency={currency}
+          onAdd={(line) => {
+            const platter = menu?.items.find((i) => i.id === KISINIA_ID) ?? menu?.items[0] ?? null
+            if (!platter) return
+            addPlatterKisinia(platter, [], line.qty)
+          }}
         />
-      )}      <KisiniaSidePicker
-        open={kisOpen}
-        onClose={() => setKisOpen(false)}
+      )}
+
+      <KisiniaSidePicker
+        open={platterOpen}
+        onClose={() => setPlatterOpen(false)}
         platter={activePlatter}
         sides={(menu?.items || []).filter((i) => i.category === 'wl-sides' && (i as any).available !== false)}
         currency={currency}
-        onAdd={addKisinia}
+        onAdd={addPlatterKisinia}
       />
 
       {/* ============ CART SHEET ============ */}
@@ -889,7 +898,6 @@ export default function CustomerPage() {
         onClose={() => setCartOpen(false)}
         cart={cart}
         kisCart={kisCart}
-        kisiniaCart={kisiniaCart}
         menu={menu}
         currency={currency}
         tables={tables}
@@ -906,8 +914,8 @@ export default function CustomerPage() {
         dec={dec}
         incKis={incKis}
         decKis={decKis}
-        incPlatter={incPlatter}
-        decPlatter={decPlatter}
+        kisiniaCart={kisiniaCart}
+        setKisiniaCart={setKisiniaCart}
         clear={clear}
         onPlaced={(o) => {
           // Checkout never adds to "My orders" — orders appear only after
@@ -1030,7 +1038,6 @@ function CartSheet({
   onClose,
   cart,
   kisCart,
-  platterCart,
   menu,
   currency,
   tables,
@@ -1047,15 +1054,15 @@ function CartSheet({
   dec,
   incKis,
   decKis,
-  incPlatter,
-  decPlatter,
+  kisiniaCart,
+  setKisiniaCart,
   clear,
   onPlaced,
 }: {
   open: boolean
   onClose: () => void
   cart: Record<string, number>
-  kisCart: Record<string, KisiniaCartLine>    kisiniaCart?: Record<string, { itemId: string; sides: string[]; qty: number }>
+  kisCart: Record<string, KisiniaCartLine>
   menu: MenuResponse | null
   currency: string
   tables: number
@@ -1072,8 +1079,8 @@ function CartSheet({
   dec: (id: string) => void
   incKis: (key: string) => void
   decKis: (key: string) => void
-  incPlatter?: (key: string) => void
-  decPlatter?: (key: string) => void
+  kisiniaCart: Record<string, { itemId: string; sides: string[]; qty: number }>
+  setKisiniaCart: (v: Record<string, { itemId: string; sides: string[]; qty: number }>) => void
   clear: () => void
   onPlaced: (o: Order) => void
 }) {
@@ -1120,16 +1127,17 @@ function CartSheet({
     if (!menu) return []
     const map = new Map(menu.items.map((i) => [i.id, i]))
     const sideMap = new Map(menu.items.filter((i) => i.category === 'wl-sides').map((i) => [i.id, i]))
-    return Object.entries(kisiniaCart || {})
+    const kc = kisiniaCart || {}
+    return Object.entries(kc)
       .map(([key, l]) => {
         const item = map.get(l.itemId)
         if (!item) return null
-        const sides = (l.sides || []).map((sid) => sideMap.get(sid)).filter(Boolean) as MenuItem[]
+        const sides = (l.sides || []).map((sid: string) => sideMap.get(sid)).filter(Boolean) as MenuItem[]
         const note = sides.length ? `Sides: ${sides.map((s) => s.name).join(', ')}` : ''
         return { key, item, note, qty: l.qty }
       })
       .filter(Boolean) as { key: string; item: MenuItem; note: string; qty: number }[]
-  }, [platterCart, menu])
+  }, [kisiniaCart, menu])
 
   const subtotal =
     lines.reduce((s, l) => s + l.item.price * l.qty, 0) +
@@ -1214,14 +1222,26 @@ function CartSheet({
                   </div>
                   <div className="flex shrink-0 items-center gap-0.5 rounded-xl border border-brand-200 bg-white p-0.5">
                     <button
-                      onClick={() => decPlatter?.(key)}
+                      onClick={() => {
+                        const next = { ...kisiniaCart }
+                        if (!next[key]) return
+                        const q = next[key].qty - 1
+                        if (q <= 0) delete next[key]
+                        else next[key] = { ...next[key], qty: q }
+                        setKisiniaCart(next)
+                      }}
                       className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 hover:bg-brand-50 hover:text-brand-600"
                     >
                       <Minus className="h-3.5 w-3.5" />
                     </button>
                     <span className="w-5 text-center text-sm font-bold text-ink-900">{qty}</span>
                     <button
-                      onClick={() => incPlatter?.(key)}
+                      onClick={() => {
+                        setKisiniaCart({
+                          ...kisiniaCart,
+                          [key]: { ...kisiniaCart[key], qty: (kisiniaCart[key]?.qty ?? 0) + 1 }
+                        })
+                      }}
                       className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 hover:bg-brand-50 hover:text-brand-600"
                     >
                       <Plus className="h-3.5 w-3.5" />
