@@ -10,7 +10,7 @@ interface SideCount {
   [id: string]: number
 }
 
-export default function PlatterPicker({
+export default function KisiniaSidePicker({
   open,
   onClose,
   platter,
@@ -72,7 +72,7 @@ export default function PlatterPicker({
         reset()
         onClose()
       }}
-      title="Platter selection"
+      title="Kisinia side selection"
     >
       <div className="flex h-full flex-col">
         <div className="flex items-start gap-3 px-5 pb-4 pt-1">
@@ -155,7 +155,7 @@ export default function PlatterPicker({
               className={`btn-primary inline-flex items-center gap-2 ${!canAdd ? 'opacity-50' : ''}`}
             >
               <UtensilsCrossed className="h-4 w-4" />
-              Add to cart · {money(currency, platter.price * qty)}
+              Add to kisinia · {money(currency, platter.price * qty)}
             </button>
           </div>
         </div>

@@ -79,13 +79,13 @@ export default function KisiniaBuilder({
         <p className="text-[13px] leading-relaxed text-ink-500">{config.blurb}</p>
 
         {/* Choose the path (exclusive) */}
-        <section aria-label="Choose how to build your platter">
+        <section aria-label="Choose how to build your kisinia">
           <div className="grid grid-cols-2 gap-2.5">
             <ChoiceTile
               active={mode === 'size'}
               onClick={() => setMode('size')}
               Icon={Users}
-              title="Platter size"
+              title="Kisinia size"
               sub="Choose by people count"
             />
             <ChoiceTile
@@ -98,7 +98,7 @@ export default function KisiniaBuilder({
           </div>
         </section>
 
-        {/* ===== PATH 1: platter size ===== */}
+        {/* ===== PATH 1: kisinia size ===== */}
         {mode === 'size' ? (
           <section>
             <Step n={1} label="Chagua size yako" hint="Kitchen fills the food" />
@@ -136,7 +136,7 @@ export default function KisiniaBuilder({
             </div>
             <p className="mt-2.5 flex items-start gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-[11.5px] leading-snug text-ink-500">
               <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-500" />
-              Just pick how many people — our kitchen fills the platter with its best dishes. No
+              Just pick how many people — our kitchen fills the kisinia with its best dishes. No
               food picking needed.
             </p>
           </section>
@@ -203,7 +203,7 @@ export default function KisiniaBuilder({
             </div>
             <p className="mt-2.5 flex items-start gap-1.5 rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-[11.5px] leading-snug text-ink-500">
               <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-500" />
-              No platter size here — you pay exactly for the dishes you picked.
+              No kisinia size here — you pay exactly for the dishes you picked.
             </p>
           </section>
         )}
@@ -214,7 +214,7 @@ export default function KisiniaBuilder({
             <>
               <div className="flex items-center justify-between text-[13px]">
                 <span className="text-ink-500">
-                  {quote ? `${quote.sizeName} platter (${quote.slots} picks)` : 'No size selected'}
+                  {quote ? `${quote.sizeName} kisinia (${quote.slots} picks)` : 'No size selected'}
                 </span>
                 <span className="font-semibold text-ink-800">
                   {money(currency, quote?.unitPrice ?? 0)}
@@ -263,7 +263,7 @@ export default function KisiniaBuilder({
             <div className="flex items-center gap-0.5 rounded-xl border border-slate-200 bg-white p-0.5">
               <button
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                aria-label="Fewer platters"
+                aria-label="Fewer kisinias"
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 transition hover:bg-slate-100"
               >
                 <Minus className="h-3.5 w-3.5" strokeWidth={2.5} />
@@ -271,7 +271,7 @@ export default function KisiniaBuilder({
               <span className="w-5 text-center text-sm font-bold text-ink-900">{qty}</span>
               <button
                 onClick={() => setQty((q) => Math.min(10, q + 1))}
-                aria-label="More platters"
+                aria-label="More kisinias"
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-ink-600 transition hover:bg-slate-100"
               >
                 <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />
@@ -292,7 +292,7 @@ export default function KisiniaBuilder({
           {canAdd && quote ? (
             <>Add to cart · {money(currency, quote.unitPrice * qty)}</>
           ) : mode === 'size' ? (
-            <>Pick a platter size</>
+            <>Pick a kisinia size</>
           ) : (
             <>Pick at least one dish</>
           )}

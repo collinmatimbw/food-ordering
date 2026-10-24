@@ -332,7 +332,7 @@ export default function KisiniaManager({
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-slate-50 px-4 py-3">
           <span className="text-[12px] text-ink-500">
-            Example: {money(currency, draft.sizes[0]?.price ?? 0)} platter with{' '}
+            Example: {money(currency, draft.sizes[0]?.price ?? 0)} kisinia with{' '}
             {draft.sizes[0]?.slots ?? 0} picks — extras from{' '}
             {money(currency, Math.min(...draft.components.map((c) => c.price)))}
           </span>

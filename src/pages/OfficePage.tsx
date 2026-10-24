@@ -327,7 +327,7 @@ export default function OfficePage() {
     tables: { title: 'Tables', sub: 'Floor occupancy and running totals' },
     reports: { title: 'Reports', sub: 'Sales snapshot and best sellers' },
     menu: { title: 'Menu Manager', sub: 'Add, edit and curate the customer menu' },
-    kisinia: { title: 'Kisinia', sub: 'Platter builder sizes and components' },
+    kisinia: { title: 'Kisinia', sub: 'Kisinia builder sizes and components' },
   }
 
   const totalTables = menu?.restaurant.tables ?? 0

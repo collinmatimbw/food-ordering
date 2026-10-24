@@ -76,7 +76,7 @@ export const fetchOrders = () => officeRequest<Order[]>(`${BASE}/orders`)
 export const fetchOrder = (code: string, phone: string) =>
   request<Order>(`${BASE}/orders/${encodeURIComponent(code)}?phone=${encodeURIComponent(phone)}`)
 
-/** One line of the order payload: a dish or a kisinia platter. */
+/** One line of the order payload: a dish or a kisinia. */
 export type OrderLineInput =
   | { id: string; qty: number; note?: string }
   | {
@@ -157,7 +157,7 @@ export const uploadImage = async (file: File): Promise<string> => {
   return resolveAssetUrl((data as any).url as string) as string
 }
 
-/** Save the kisinia platter config (office). */
+/** Save the kisinia config (office). */
 export const saveKisinia = (config: KisiniaConfig) =>
   officeRequest<KisiniaConfig>(`${BASE}/kisinia`, {
     method: 'PUT',

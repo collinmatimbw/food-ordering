@@ -61,7 +61,7 @@ export interface CartLine {
   note?: string
 }
 
-/** A kisinia platter line in the cart (client side). */
+/** A kisinia line in the cart (client side). */
 export interface KisiniaCartLine {
   sizeId: string
   /** component id -> portion count */
@@ -73,7 +73,7 @@ export interface OrderItem extends CartLine {
   name: string
   icon: string
   price: number
-  /** resolved kisinia details when this line is a platter */
+  /** resolved kisinia details when this line is a kisinia */
   kisinia?: {
     sizeId: string
     sizeName: string

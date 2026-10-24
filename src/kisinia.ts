@@ -26,7 +26,7 @@ export interface KisiniaQuote {
  *  - `sizeId === COMBO_ID`  → food combo: unitPrice = Σ(component price × qty).
  *  - otherwise              → platter size: unitPrice = size price (+ overflow
  *    when the customer customised more portions than the size includes).
- * A size platter with no picks is valid — the kitchen decides the food.
+ * A size kisinia with no picks is valid — the kitchen decides the food.
  * Returns null when the config/size/picks are invalid.
  */
 export function quoteKisinia(
