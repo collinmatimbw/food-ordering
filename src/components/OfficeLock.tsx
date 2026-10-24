@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Lock, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { getOfficeKey, setOfficeKey, verifyOfficeKey } from '../api'
 import { hideBootSplash } from './Splash'
 
@@ -33,7 +33,7 @@ export default function OfficeLock({ onUnlock }: { onUnlock: () => void }) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-6">
+    <div className="flex min-h-screen items-center justify-center bg-white p-6">
       <form
         onSubmit={submit}
         className="card w-full max-w-sm p-8 text-center shadow-card"
@@ -41,7 +41,7 @@ export default function OfficeLock({ onUnlock }: { onUnlock: () => void }) {
         <img
           src="/logo/logoo.png"
           alt=""
-          className="mx-auto h-14 w-auto object-contain"
+          className="mx-auto h-20 w-auto object-contain"
           draggable={false}
         />
         <h1 className="font-display mt-4 text-xl font-extrabold text-ink-900">Staff access</h1>

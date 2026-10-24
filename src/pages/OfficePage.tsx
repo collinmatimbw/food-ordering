@@ -44,7 +44,7 @@ import {
   VolumeX,
   Wallet,
   X,
-  Lock,
+  Lock
 } from 'lucide-react'
 import TableQrSheet from '../components/TableQrSheet'
 
@@ -620,14 +620,7 @@ export default function OfficePage() {
 
               {/* Content */}
               {loading ? (
-                <div className="mt-4 grid items-start gap-4 md:grid-cols-2 xl:grid-cols-4">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="flex flex-col gap-3">
-                      <div className="h-9 w-40 animate-pulse rounded-xl bg-slate-200/70" />
-                      <div className="h-52 animate-pulse rounded-3xl bg-slate-200/50" />
-                    </div>
-                  ))}
-                </div>
+                <Splash key="office-orders-loading" label="Loading orders…" />
               ) : ordersView === 'kanban' && filter === 'cancelled' ? (
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                   {filteredOrders.map((order) => (

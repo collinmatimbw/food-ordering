@@ -21,73 +21,14 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        padding: 24px;
-        background: linear-gradient(180deg, #14352f 0%, #0c2a25 55%, #051f1b 100%);
+        background: #ffffff;
         transition: opacity 0.45s ease;
       }
-      #wl-boot .wl-mark {
-        width: 88px;
-        height: 88px;
-        border-radius: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #8eb69b, #235347);
-        color: #031415;
-        font-family: 'Sora', Inter, system-ui, sans-serif;
-        font-size: 34px;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.6);
+      #wl-boot .wl-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
         animation: wl-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-      }
-      #wl-boot .wl-name {
-        margin-top: 22px;
-        color: #fff;
-        font-family: 'Sora', Inter, system-ui, sans-serif;
-        font-size: clamp(26px, 7vw, 34px);
-        font-weight: 800;
-        line-height: 1.1;
-        letter-spacing: -0.02em;
-        animation: wl-rise 0.5s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
-      }
-      #wl-boot .wl-sub {
-        margin-top: 10px;
-        color: rgba(218, 241, 222, 0.6);
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 10.5px;
-        font-weight: 600;
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        animation: wl-rise 0.5s 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
-      }
-      #wl-boot .wl-track {
-        margin-top: 26px;
-        width: min(210px, 60vw);
-        height: 6px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.1);
-        overflow: hidden;
-      }
-      #wl-boot .wl-fill {
-        display: block;
-        width: 45%;
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #8eb69b, #f5d08a);
-        animation: wl-sweep 1.3s ease-in-out infinite;
-      }
-      @keyframes wl-sweep {
-        0% {
-          transform: translateX(-110%);
-        }
-        50% {
-          transform: translateX(20%);
-        }
-        100% {
-          transform: translateX(110%);
-        }
       }
       @keyframes wl-pop {
         0% {
@@ -99,21 +40,8 @@
           opacity: 1;
         }
       }
-      @keyframes wl-rise {
-        0% {
-          transform: translateY(14px);
-          opacity: 0;
-        }
-        100% {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
       @media (prefers-reduced-motion: reduce) {
-        #wl-boot .wl-mark,
-        #wl-boot .wl-name,
-        #wl-boot .wl-sub,
-        #wl-boot .wl-fill {
+        #wl-boot .wl-logo {
           animation: none;
         }
       }
@@ -123,10 +51,7 @@
     <div id="root"></div>
     <!-- Static Willis Lounge splash: paints instantly, JS fades it out -->
     <div id="wl-boot" aria-hidden="true">
-      <div class="wl-mark">WL</div>
-      <div class="wl-name">WILLIS LOUNGE</div>
-      <div class="wl-sub">Bar &amp; Grill · Sinza Mapambano</div>
-      <div class="wl-track"><span class="wl-fill"></span></div>
+      <img class="wl-logo" src="/logo/logoo.png" alt="Willis Lounge" />
     </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
