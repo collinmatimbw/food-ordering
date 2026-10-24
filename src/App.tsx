@@ -19,7 +19,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
-      {route === 'office' ? <OfficePage /> : <CustomerPage />}
+      {route === 'office' ? (
+        typeof window !== 'undefined' && window.location.hash.includes('/office')
+          ? <OfficePage />
+          : <CustomerPage />
+      ) : <CustomerPage />}
     </div>
   )
 }
