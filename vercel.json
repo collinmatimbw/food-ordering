@@ -8,13 +8,30 @@
     {
       "source": "/uploads/(.*)",
       "destination": "https://food-point-api.onrender.com/uploads/$1"
+    },
+    {
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
+    },
+    {
+      "source": "/icons/(.*)",
+      "destination": "/icons/$1"
+    },
+    {
+      "source": "/sw.js",
+      "destination": "/sw.js"
+    },
+    {
+      "source": "/favicon.svg",
+      "destination": "/favicon.svg"
+    },
+    {
+      "source": "/icons/icon-192x192.png",
+      "destination": "/icons/icon-192x192.png"
+    },
+    {
+      "source": "/icons/icon-512x512-maskable.png",
+      "destination": "/icons/icon-512x512-maskable.png"
     }
   ]
 }
-
-/*
-NOTES
-- The PWA files live at the published root: /manifest.json, /sw.js, /icons/*, /favicon.svg
-- If those paths return 404 after the next deploy, import the repo in the Vercel dashboard and deploy again from Git.
-- Do not point /api or /uploads at the Render backend for the PWA assets above.
-*/
