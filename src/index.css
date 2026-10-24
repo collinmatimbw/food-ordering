@@ -184,3 +184,13 @@ h6,
     scrollbar-width: none;
   }
 }
+
+/* Hero food-photo background marquee (kept raw so it is never purged) */
+@keyframes heroScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

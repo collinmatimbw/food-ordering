@@ -133,7 +133,24 @@ export default function CustomerPage() {
   const [tracking, setTracking] = useState(false)
 
   useEffect(() => {
-    fetchMenu().then(setMenu).catch((e) => setError(e.message))
+    // Fetch the menu in the background; the splash stays until it lands,
+    // but a slow/hung request can never block the page forever.
+    let mounted = true
+    const controller = new AbortController()
+    const tick = async () => {
+      try {
+        const m = await fetchMenu()
+        if (mounted) setMenu(m)
+      } catch (e) {
+        if (mounted) setError(e instanceof Error ? e.message : 'Menu unavailable')
+      }
+    }
+    tick()
+    controller.signal.addEventListener('abort', () => {})
+    return () => {
+      mounted = false
+      controller.abort()
+    }
   }, [])
 
   useEffect(() => {
@@ -528,8 +545,11 @@ export default function CustomerPage() {
               {heroPhotos.length > 0 && (
                 <div className="absolute inset-0" aria-hidden>
                   <div
-                    className="flex h-full w-max animate-heroScroll motion-reduce:animate-none"
-                    style={{ animationDuration: `${Math.max(30, heroPhotos.length * 6)}s` }}
+                    className="flex h-full w-max"
+                    style={{
+                      animation: `heroScroll ${Math.max(24, heroPhotos.length * 4)}s linear infinite`,
+                      willChange: 'transform',
+                    }}
                   >
                     {[...heroPhotos, ...heroPhotos].map((p, idx) => (
                       <DishImage
